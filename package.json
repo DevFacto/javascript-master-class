@@ -1,9 +1,10 @@
 {
-	"name": "javascript-master-class",
-	"description": "A quick course for DevFacto's in-house JS development teams",
-	"version": "0.0.1",
-	"private": true,
-	"devDependencies": {
-	    "grunt-markdown": "0.1.2"
-	  }
+  "name": "javascript-master-class",
+  "description": "A quick course for DevFacto's in-house JS development teams",
+  "version": "0.0.1",
+  "private": true,
+  "devDependencies": {
+    "grunt-markdown": "0.1.2",
+    "grunt-contrib-watch": "~0.1.4"
+  }
 }
