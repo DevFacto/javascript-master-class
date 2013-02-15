@@ -8,7 +8,11 @@ module.exports = function(grunt) {
 	      },
 	      template: 'template.html'
 	    }  
-	  }  
+	  },
+	  watch: {
+  		files: 'content/*',
+  		tasks: 'markdown'
+		}
 	});
 	grunt.loadNpmTasks('grunt-markdown');
 	grunt.registerTask('default', ['markdown']);
