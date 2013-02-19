@@ -31,6 +31,7 @@
       </header>
       <section>
       <h1>Intro to JavaScript (ECMAScript, JScript, etc)</h1>
+<h2>Overview</h2>
 <h3>What is it?</h3>
 <ul>
 <li>An interpreted programming language</li>
@@ -95,6 +96,120 @@ console.log(a); <span class="comment">//3</span></code></pre>
 <li>implementation differences across platforms</li>
 <li><code>for...in</code> vs <code>for()</code></li>
 </ul>
+<h3>The Reinvention of JS</h3>
+<h4>ES5</h4>
+<ul>
+<li><p>Array extras</p>
+<pre><code class="lang-javascript"><span class="keyword">var</span> a = [<span class="string">'one'</span>, <span class="string">'two'</span>, <span class="string">'three'</span>, <span class="string">'four'</span>, <span class="string">'five'</span>]
+
+<span class="keyword">var</span> containO = a.filter(<span class="keyword">function</span>(item){ <span class="keyword">return</span> item.indexOf(<span class="string">'o'</span>) != -<span class="number">1</span>; }); <span class="comment">// ['one', 'two', 'four'];</span>
+
+<span class="keyword">var</span> someHaveFiveLetters = a.some(<span class="keyword">function</span>(item){ <span class="keyword">return</span> item.length &gt; <span class="number">4</span>; }); <span class="comment">//true</span></code></pre>
+</li>
+<li><p>Object.create</p>
+<pre><code class="lang-javascript"><span class="function"><span class="keyword">function</span> <span class="title">Animal</span><span class="params">()</span> {</span>
+   ...
+}
+
+<span class="comment">//Tedious way of doing inheritance</span>
+<span class="function"><span class="keyword">function</span> <span class="title">Cat</span><span class="params">(name)</span> {</span>
+  <span class="keyword">this</span>.name = name;
+}
+
+<span class="comment">//Copy each attribute on Animal Function to Cat Function</span>
+<span class="comment">//Equivalent to 'static' variables</span>
+Object.keys(Animal).forEach(<span class="keyword">function</span>(attribute) {
+  Cat[attribute] = Animal[attribute];
+});
+
+<span class="comment">//Do the prototype chain shuffle</span>
+<span class="function"><span class="keyword">function</span> <span class="title">ctor</span><span class="params">()</span> {</span> <span class="keyword">this</span>.constructor = Cat; }
+ctor.prototype = <span class="keyword">new</span> Animal();
+
+Cat.prototype = <span class="keyword">new</span> ctor();
+
+<span class="comment">//Improved way of doing inheritance</span>
+<span class="function"><span class="keyword">function</span> <span class="title">Cat</span><span class="params">(name)</span> {</span>
+  <span class="keyword">var</span> cat = Object.create(<span class="keyword">new</span> Animal());
+  cat.name = name;
+  <span class="keyword">return</span> cat;
+}
+
+<span class="comment">//As an added benefit, if we forget the `new` keyword</span>
+<span class="comment">//to the second version, we don't get `undefined`</span></code></pre>
+</li>
+<li>GeoLocation</li>
+<li>Iterators</li>
+<li>Object.getPrototypeOf</li>
+</ul>
+<h4>ES6</h4>
+<ul>
+<li>Default Parameters</li>
+<li>Template Strings</li>
+<li>New Variable modifiers (let, const)</li>
+<li>Destructuring Assignment</li>
+</ul>
+<h2>Dirty Details</h2>
+<h3>undefined, null and checking for values</h3>
+<p>In JavaScript, <code>undefined</code> means a variable has been declared but has not yet been assigned a value. This variable can be anywhere in the current function (scope) since it will be &#39;hoisted&#39;.</p>
+<pre><code class="lang-javascript"><span class="keyword">var</span> TestVar;
+alert(TestVar); <span class="comment">//shows undefined</span>
+alert(<span class="keyword">typeof</span> TestVar); <span class="comment">//shows undefined</span></code></pre>
+<p><code>null</code> is an assignment value, and can be assigned to a variable as a representation of no value.</p>
+<pre><code class="lang-javascript"><span class="keyword">var</span> TestVar = <span class="literal">null</span>;
+alert(TestVar); <span class="comment">//shows null</span>
+alert(<span class="keyword">typeof</span> TestVar); <span class="comment">//shows object</span></code></pre>
+<p><code>undefined</code> and <code>null</code> are two distinct types: undefined is a type itself (undefined) while null is an object.</p>
+<p>Use <code>a == undefined</code></p>
+<pre><code class="lang-javascript"><span class="keyword">var</span> a;
+a == <span class="literal">undefined</span> <span class="comment">//true</span>
+a = <span class="literal">null</span>;
+a == <span class="literal">undefined</span> <span class="comment">//true</span>
+a = <span class="string">''</span>;
+a == <span class="literal">undefined</span> <span class="comment">//false</span></code></pre>
+<p>We may want to check if a variable exists. To do this, we use <code>typeof(a) === &#39;undefined&#39;</code> which doesn&#39;t cause an exception when the variable isn&#39;t present</p>
+<pre><code class="lang-javascript"><span class="keyword">var</span> a, b = <span class="literal">null</span>, c=<span class="number">0</span>, d=<span class="string">''</span>;
+
+console.log(<span class="string">"a: "</span> + !!a); <span class="comment">//false</span>
+console.log(<span class="string">"typeof(a) ==='undefined': "</span> + (<span class="keyword">typeof</span>(a) === <span class="string">'undefined'</span>)); <span class="comment">//true</span>
+console.log(<span class="string">'a == null: '</span> + (a == <span class="literal">null</span>)); <span class="comment">//true</span>
+console.log(<span class="string">'a == undefined: '</span> + (a == <span class="literal">undefined</span>)); <span class="comment">//true</span>
+console.log(<span class="string">'a === null: '</span> + (a === <span class="literal">null</span>)); <span class="comment">//false</span>
+console.log(<span class="string">'a === undefined: '</span> + (a === <span class="literal">undefined</span>)); <span class="comment">//true</span>
+
+console.log(<span class="string">"b: "</span> + !!b); <span class="comment">//false</span>
+console.log(<span class="string">"typeof(b) ==='undefined': "</span> + (<span class="keyword">typeof</span>(b) === <span class="string">'undefined'</span>)); <span class="comment">//false</span>
+console.log(<span class="string">'b == null: '</span> + (b == <span class="literal">null</span>)); <span class="comment">//true</span>
+console.log(<span class="string">'b == undefined: '</span> + (b == <span class="literal">undefined</span>)); <span class="comment">//true</span>
+console.log(<span class="string">'b === null: '</span> + (b === <span class="literal">null</span>)); <span class="comment">//true</span>
+console.log(<span class="string">'b === undefined: '</span> + (b === <span class="literal">undefined</span>)); <span class="comment">//false</span>
+
+console.log(<span class="string">"c: "</span> + !!c); <span class="comment">//false</span>
+
+console.log(<span class="string">"d: "</span> + !!d); <span class="comment">//false</span>
+
+console.log(<span class="string">"typeof(e) ==='undefined': "</span> + (<span class="keyword">typeof</span>(e) === <span class="string">'undefined'</span>)); <span class="comment">//true</span></code></pre>
+<h3>Equality Comparisons</h3>
+<p>To quote Douglas Crockford&#39;s excellent JavaScript: The Good Parts,</p>
+<blockquote>
+<p>JavaScript has two sets of equality operators: === and !==, and their evil twins == and !=. The good ones work the way you would expect. If the two operands are of the same type and have the same value, then === produces true and !== produces false. The evil twins do the right thing when the operands are of the same type, but if they are of different types, they attempt to coerce the values. the rules by which they do that are complicated and unmemorable. These are some of the interesting cases:</p>
+</blockquote>
+<pre><code class="lang-javascript">  <span class="string">''</span> == <span class="string">'0'</span>           <span class="comment">// false</span>
+  <span class="number">0</span> == <span class="string">''</span>             <span class="comment">// true</span>
+  <span class="number">0</span> == <span class="string">'0'</span>            <span class="comment">// true</span>
+
+  <span class="literal">false</span> == <span class="string">'false'</span>    <span class="comment">// false</span>
+  <span class="literal">false</span> == <span class="string">'0'</span>        <span class="comment">// true</span>
+
+  <span class="literal">false</span> == <span class="literal">undefined</span>  <span class="comment">// false</span>
+  <span class="literal">false</span> == <span class="literal">null</span>       <span class="comment">// false</span>
+  <span class="literal">null</span> == <span class="literal">undefined</span>   <span class="comment">// true</span>
+
+  <span class="string">' \t\r\n '</span> == <span class="number">0</span>     <span class="comment">// true</span></code></pre>
+<blockquote>
+<p>The lack of transitivity is alarming. My advice is to never use the evil twins. Instead, always use ===and !==. All of the comparisons just shown produce false with the === operator.</p>
+</blockquote>
+<h3>Creating Objects</h3>
 
       </section>
       <footer>
