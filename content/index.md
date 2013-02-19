@@ -216,3 +216,13 @@ To quote Douglas Crockford's excellent JavaScript: The Good Parts,
 > The lack of transitivity is alarming. My advice is to never use the evil twins. Instead, always use ===and !==. All of the comparisons just shown produce false with the === operator.
 
 ###Creating Objects
+
+Functions are just functions until invoked with the `new` keyword.
+
+```javascript
+function obj(a) {
+  this.a = a;
+}; 
+new obj(3);
+
+```

@@ -210,6 +210,11 @@ console.log(<span class="string">"typeof(e) ==='undefined': "</span> + (<span cl
 <p>The lack of transitivity is alarming. My advice is to never use the evil twins. Instead, always use ===and !==. All of the comparisons just shown produce false with the === operator.</p>
 </blockquote>
 <h3>Creating Objects</h3>
+<p>Functions are just functions until invoked with the <code>new</code> keyword.</p>
+<pre><code class="lang-javascript"><span class="function"><span class="keyword">function</span> <span class="title">obj</span><span class="params">(a)</span> {</span>
+  <span class="keyword">this</span>.a = a;
+}; 
+<span class="keyword">new</span> obj(<span class="number">3</span>);</code></pre>
 
       </section>
       <footer>
