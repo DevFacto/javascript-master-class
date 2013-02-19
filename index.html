@@ -30,14 +30,71 @@
         </ul>
       </header>
       <section>
-      <h3>JS Intro</h3>
-<p>This is some basic content heresdf </p>
-<h3>two</h3>
-<p>select this thing ok</p>
-<pre><code class="lang-bash">cd ..
-<span class="keyword">echo</span> <span class="string">'sldkfjsdf'</span>
-puts markdown.to_html</code></pre>
-<p>asdfjalsdfkjasdf</p>
+      <h1>Intro to JavaScript (ECMAScript, JScript, etc)</h1>
+<h3>What is it?</h3>
+<ul>
+<li>An interpreted programming language</li>
+<li>Enables HTTP requests, DOM manipulation, user interaction in the browser</li>
+<li>Grew to be most popular programming language* </li>
+<li>Is now used on client and server (Node.js)</li>
+</ul>
+<p><sub>*redmonk.com</sub></p>
+<h3>Characteristics</h3>
+<ul>
+<li>Prototype-based<ul>
+<li>No classes (for now)</li>
+<li>Can chain objects in an inheritance chain through &#39;prototypes&#39;s</li>
+</ul>
+</li>
+<li>Weakly-typed, ad-hoc polymorphism aka &#39;duck-typed&#39;</li>
+<li>First-class functions<ul>
+<li>Functions are objects</li>
+<li>Can be arguments to other functions, returned from functions, assigned to variables</li>
+</ul>
+</li>
+</ul>
+<pre><code class="lang-javascript"><span class="function"><span class="keyword">function</span> <span class="title">a</span><span class="params">()</span> {</span>
+    ...
+}
+
+<span class="function"><span class="keyword">function</span> <span class="title">b</span><span class="params">(parameter)</span> {</span>
+    <span class="keyword">return</span> parameter;
+}
+
+<span class="keyword">var</span> c = b(a);</code></pre>
+<h3>Qurks</h3>
+<p>JavaScript is famous for its quirks, made possible through its aggressive type coersion. <a href="http://www.youtube.com/watch?v=kXEgk1Hdze0">The WAT Video</a> by Gary Bernhardt goes over a few.</p>
+<p>Code can be written using only <a href="http://patriciopalladino.com/blog/2012/08/09/non-alphanumeric-javascript.html">()[]{}!+</a> characters.</p>
+<pre><code class="lang-javascript">+!<span class="string">''</span>+[] <span class="comment">//'1'</span></code></pre>
+<p>Others gotchas include:</p>
+<ul>
+<li>Variable Hoisting<pre><code class="lang-javascript"><span class="keyword">var</span> a = b; <span class="comment">//undefined, but no error</span>
+<span class="keyword">var</span> b = <span class="number">3</span>;
+a = b; <span class="comment">//3</span></code></pre>
+</li>
+<li><p>&#39;this&#39; variable means different things in different situations</p>
+<pre><code class="lang-javascript"><span class="function"><span class="keyword">function</span> <span class="title">a</span><span class="params">()</span> {</span>
+  console.log(<span class="keyword">this</span>);
+}
+
+a(); <span class="comment">//this=undefined</span>
+
+<span class="keyword">var</span> o = <span class="string">'{name: '</span>Root Object<span class="string">', a: a}'</span>;
+o.a(); <span class="comment">//this=o</span>
+
+a.call(<span class="string">'Something Else'</span>) <span class="comment">//this='Something Else'</span></code></pre>
+</li>
+<li>aggressive type coersion (see above)</li>
+<li>implicity global variable scope<pre><code class="lang-javascript">!<span class="keyword">function</span>(){ 
+  a = <span class="number">3</span>; <span class="comment">//no 'var' </span>
+}()
+console.log(a); <span class="comment">//3</span></code></pre>
+</li>
+<li>no classic OO inheritance model</li>
+<li>many &#39;deprecated&#39; language features: with, eval, String.prototype.blink, etc</li>
+<li>implementation differences across platforms</li>
+<li><code>for...in</code> vs <code>for()</code></li>
+</ul>
 
       </section>
       <footer>
