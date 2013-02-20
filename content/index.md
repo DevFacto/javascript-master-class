@@ -4,7 +4,7 @@
 
 ###What is it?
 
-- An interpreted programming language
+- An [interpreted](http://en.wikipedia.org/wiki/Interpreted_language) programming language
 - Enables HTTP requests, DOM manipulation, user interaction in the browser
 - Grew to be most popular programming language* 
 - Is now used on client and server (Node.js)
@@ -85,9 +85,15 @@ Others gotchas include:
   ```javascript
   var a = ['one', 'two', 'three', 'four', 'five']
 
-  var containO = a.filter(function(item){ return item.indexOf('o') != -1; }); // ['one', 'two', 'four'];
+  var containO = a.filter(
+            function(item){ 
+              return item.indexOf('o') != -1; 
+            }); // ['one', 'two', 'four'];
 
-  var someHaveFiveLetters = a.some(function(item){ return item.length > 4; }); //true
+  var someHaveFiveLetters = a.some(
+            function(item){ 
+              return item.length > 4; 
+            }); //true
   ```
 - Object.create
   ```javascript
@@ -135,7 +141,7 @@ Others gotchas include:
 
 ##Dirty Details
 
-###undefined, null and checking for values
+###undefined, null, and truthy/falsy
 
 In JavaScript, `undefined` means a variable has been declared but has not yet been assigned a value. This variable can be anywhere in the current function (scope) since it will be 'hoisted'.
 
@@ -232,7 +238,7 @@ obj.a //3
 
 > In computer science, a closure is a first-class function with free variables that are bound in the lexical environment.
 
-&mdash; Mark Thiessen, Computer Scientist
+&mdash; Mark Thiessen, Computing Scientist, when he quoted [wikipedia](http://bit.ly/4Iou)
 
 Basically, JavaScript allows functions to reference variables outside their own scope. Doing so is similar to using parameters where parameters are bound to another scope.
 
@@ -240,7 +246,8 @@ Basically, JavaScript allows functions to reference variables outside their own 
 var getPairFormatter= function(){
   var format= "{key} -> {value}";
   return function(obj){
-    return format.replace('{key}', obj.key).replace('{value}', obj.value);
+    return format.replace('{key}', obj.key)
+                 .replace('{value}', obj.value);
   };
 }
 var formatter = getPairFormatter();
@@ -349,11 +356,19 @@ http://ejohn.org/blog/re-securing-json/
 
 jQuery ($) is the most ubiquitous library known to all JavaScript-kind. jQuery is so successful because it abstracts much of the complexity of web development away. The DOM API is extremely tedious, and so is working with XMLHttpRequests. It is also an extremely elegant framework: all jQuery objects are arrays of DOM elements at their core, and can be indexed and manipulated as such. Also, each jQuery operation on an object can be chained; the resulting code can be quite terse and powerful. A few must-knows:
 
-- The library can be called either `jQuery` or `$`. The dollar sign is convention, and is a legal identifier in JavaScript.
+- The library can be called either `jQuery` or `$` (or a custom name in no-conflict mode). The dollar sign is convention, and is a legal identifier in JavaScript.
 - `$(function(){...})` is jQuery's shortcut for `$(document).ready`. When the browser has fully parsed the DOM, this function will be called. At this point its safe to start loading data and manipulating the DOM.
 - Events are easy, too. Traditionally browser events have differed across browsers, and handling them was tedious. jQuery standardizes the behaviour and simplifies calls to register handlers.
 - `Sizzle` is a library jQuery uses for CSS Selection.  It is fast and flexible. jQuery shortcuts selection using `$('.somethingtoselect')`
 - jQuery also shortcuts element creation. When you call `$('<div>')`, it creates an element with the tag name you specify.
+
+A jQuery example that creates a div element, sets its text property, adds a click handler to it, and appends it to the page:
+
+    $('body').append(
+      $('<div>').text('A div footer').click(function(){
+        alert('You clicked me!');
+      });
+    );
 
 ###Other Frameworks
 
