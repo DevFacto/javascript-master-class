@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/github.css">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="icon" href="http://www.devfacto.com/wp-content/themes/wp-devfacto/favicon.ico">
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -22,25 +23,22 @@
 
       </header>
       <section>
-      <h1>Intro to JavaScript*</h1>
-<p><sub>*aka (ECMAScript, JScript, etc)</sub></p>
-<h2>Overview</h2>
+      <h2>Overview</h2>
 <h3>What is it?</h3>
 <ul>
 <li><a href="http://en.wikipedia.org/wiki/Interpreted_language">Interpreted</a></li>
 <li>Enables HTTP requests, DOM manipulation, user interaction in the browser</li>
-<li>The most popular programming language* </li>
+<li>The most popular programming language in the world (<a href="http://redmonk.com/sogrady/2012/09/12/language-rankings-9-12/">http://redmonk.com/sogrady/2012/09/12/language-rankings-9-12/</a>) </li>
 <li>Client and server (Node.js)</li>
 </ul>
-<p><sub>*redmonk.com</sub></p>
 <h3>Characteristics</h3>
 <ul>
 <li>Prototype-based<ul>
-<li>No classes (for now)</li>
+<li>No classes (for now; expected in the next major spec)</li>
 <li>Can chain objects in an inheritance chain through &#39;prototypes&#39;s</li>
 </ul>
 </li>
-<li>Weakly-typed, ad-hoc polymorphism aka &#39;duck-typed&#39;</li>
+<li>Weakly-typed, ad-hoc polymorphism &mdash; aka &#39;duck-typed&#39;</li>
 <li>First-class functions<ul>
 <li>Functions are objects</li>
 <li>Can be arguments to other functions, returned from functions, assigned to variables</li>
@@ -56,9 +54,9 @@
 }
 
 <span class="keyword">var</span> c = b(a);</code></pre>
-<h3>Qurks</h3>
+<h3>Quirks</h3>
 <p>JavaScript is famous for its quirks, made possible through its aggressive type coersion. <a href="http://www.youtube.com/watch?v=kXEgk1Hdze0">The WAT Video</a> by Gary Bernhardt goes over a few.</p>
-<p>Code can be written using only <a href="http://patriciopalladino.com/blog/2012/08/09/non-alphanumeric-javascript.html">()[]{}!+</a> characters.</p>
+<p>Because of type casts, weird code can be written using only <a href="http://patriciopalladino.com/blog/2012/08/09/non-alphanumeric-javascript.html">()[]{}!+</a> characters.</p>
 <pre><code class="lang-javascript">+!<span class="string">''</span>+[] <span class="comment">//'1'</span></code></pre>
 <p>Others gotchas include:</p>
 <ul>
@@ -158,15 +156,15 @@ alert(<span class="keyword">typeof</span> TestVar); <span class="comment">//show
 <pre><code class="lang-javascript"><span class="keyword">var</span> TestVar = <span class="literal">null</span>;
 alert(TestVar); <span class="comment">//shows null</span>
 alert(<span class="keyword">typeof</span> TestVar); <span class="comment">//shows object</span></code></pre>
-<p><code>undefined</code> and <code>null</code> are two distinct types: undefined is a type itself (undefined) while null is an object.</p>
-<p>Use <code>a == undefined</code></p>
+<p><code>undefined</code> and <code>null</code> are two distinct types: <code>undefined</code> is a type itself (undefined) while <code>null</code> is an object.</p>
+<p>If we want to test if a variable is <code>undefined</code> or <code>null</code>, use <code>a == undefined</code>.</p>
 <pre><code class="lang-javascript"><span class="keyword">var</span> a;
 a == <span class="literal">undefined</span> <span class="comment">//true</span>
 a = <span class="literal">null</span>;
 a == <span class="literal">undefined</span> <span class="comment">//true</span>
 a = <span class="string">''</span>;
 a == <span class="literal">undefined</span> <span class="comment">//false</span></code></pre>
-<p>We may want to check if a variable exists. To do this, we use <code>typeof(a) === &#39;undefined&#39;</code> which doesn&#39;t cause an exception when the variable isn&#39;t present</p>
+<p>We may want to check if a variable exists. To do this, we use <code>typeof(a) === &#39;undefined&#39;</code>. Unlike the last comparison, this won&#39;t cause an exception when the variable isn&#39;t present</p>
 <pre><code class="lang-javascript"><span class="keyword">var</span> a, b = <span class="literal">null</span>, c=<span class="number">0</span>, d=<span class="string">''</span>;
 
 console.log(<span class="string">"a: "</span> + !!a); <span class="comment">//false</span>
@@ -215,12 +213,18 @@ console.log(<span class="string">"typeof(e) ==='undefined': "</span> + (<span cl
 }; 
 <span class="keyword">var</span> obj = <span class="keyword">new</span> ClassA(<span class="number">3</span>);
 obj.a <span class="comment">//3</span></code></pre>
+<p><strong>What is this doing under the hood you ask?</strong></p>
+<ol>
+<li>It creates a new object. The type of this object is <code>object</code>; equivalent to <code>{}</code></li>
+<li>It sets this new object&#39;s internal, inaccessible, [[prototype]] property to be the constructor function&#39;s external, accessible, prototype object. </li>
+<li>It executes the constructor function, using the newly created object whenever this is mentioned.</li>
+</ol>
 <h3>Closures</h3>
 <blockquote>
 <p>In computer science, a closure is a first-class function with free variables that are bound in the lexical environment.</p>
 </blockquote>
 <p>&mdash; Mark Thiessen, Computing Scientist, when he quoted <a href="http://bit.ly/4Iou">wikipedia</a></p>
-<p>Basically, JavaScript allows functions to reference variables outside their own scope. Doing so is similar to using parameters where parameters are bound to another scope.</p>
+<p>Basically, JavaScript allows functions to reference variables outside their own scope.</p>
 <pre><code class="lang-javascript"><span class="keyword">var</span> getPairFormatter= <span class="keyword">function</span>(){
   <span class="keyword">var</span> format= <span class="string">"{key} -&gt; {value}"</span>;
   <span class="keyword">return</span> <span class="keyword">function</span>(obj){
@@ -231,46 +235,40 @@ obj.a <span class="comment">//3</span></code></pre>
 <span class="keyword">var</span> formatter = getPairFormatter();
 console.log(formatter({key:<span class="string">'name'</span>,value:<span class="string">'bob'</span>}));</code></pre>
 <p><a href="http://jsfiddle.net/gC63h/">Code Available Here</a></p>
-<pre><code class="lang-javascript"><span class="keyword">var</span> myModule = {
-  init: <span class="keyword">function</span>(settingsFunction){
-    <span class="keyword">var</span> settings = settingsFunction();
-    $(<span class="string">'input'</span>).hover(
-      <span class="keyword">function</span>(event){
-        $(<span class="keyword">this</span>).addClass(settings.getHoverClass());
-      }, 
-      <span class="keyword">function</span>(event){
-        $(<span class="keyword">this</span>).removeClass(settings.getHoverClass());
-      }
-    );
-  }
-};
-
-<span class="function"><span class="keyword">function</span> <span class="title">Settings</span><span class="params">(inputHoverClass)</span>
-{</span>
-  <span class="keyword">var</span> defaultHoverClass=<span class="string">'active'</span>;    
-  <span class="keyword">this</span>.getHoverClass = <span class="keyword">function</span>(){
-    <span class="keyword">return</span> inputHoverClass || defaultHoverClass;
-  }
+<p>Without the notion of closures, we would need to keep track of variables explicitly and pass them around as additional parameters:</p>
+<pre><code class="lang-javascript"><span class="keyword">var</span> format= <span class="string">"{key} -&gt; {value}"</span>;
+<span class="keyword">var</span> getPairFormatter= <span class="keyword">function</span>(){
+  <span class="keyword">return</span> <span class="keyword">function</span>(obj, format){
+    <span class="keyword">return</span> format.replace(<span class="string">'{key}'</span>, obj.key)
+                 .replace(<span class="string">'{value}'</span>, obj.value);
+  };
 }
-
-myModule.init(<span class="keyword">function</span>(){
-  <span class="keyword">return</span> <span class="keyword">new</span> Settings(<span class="string">'input-active'</span>)
-});</code></pre>
-<p><a href="http://jsfiddle.net/RXcMQ/3/">Code Available Here</a></p>
+<span class="keyword">var</span> formatter = getPairFormatter();
+console.log(formatter({key:<span class="string">'name'</span>,value:<span class="string">'bob'</span>}, format));</code></pre>
+<p>Closures are sometimes hard to identify in code since binding is implicit; it would be roughly equivalent to using the <code>bind</code> function as shown below:</p>
+<pre><code class="lang-javascript"><span class="keyword">var</span> getPairFormatter= <span class="keyword">function</span>(){
+  <span class="keyword">var</span> format= <span class="string">"{key} -&gt; {value}"</span>;
+  <span class="keyword">return</span> (<span class="keyword">function</span>(format, obj){
+    <span class="keyword">return</span> format.replace(<span class="string">'{key}'</span>, obj.key)
+                 .replace(<span class="string">'{value}'</span>, obj.value);
+  }).bind(<span class="literal">null</span>, format);
+}
+<span class="keyword">var</span> formatter = getPairFormatter();
+console.log(formatter({key:<span class="string">'name'</span>,value:<span class="string">'bob'</span>}));</code></pre>
 <h3>Packaging JavaScript</h3>
 <p>For large projects, JavaScript can be painful to manage. There are many different strategies to mitigate this problem, but it depends on which (if any) frameworks you&#39;re using.</p>
 <ul>
 <li><p><strong>Angular JS</strong>: Uses a module approach</p>
-<pre><code class="lang-javascript"><span class="keyword">var</span> myModule = angular.module(<span class="string">'myModule'</span>, []);
+<pre><code class="lang-javascript"><span class="keyword">var</span> myModule = angular.module(<span class="string">'myCompany.myModule'</span>, []);
 
 <span class="comment">// register a new service</span>
 myModule.value(<span class="string">'appName'</span>, <span class="string">'MyCoolApp'</span>);
 
-<span class="comment">// configure existing services inside initialization blocks.</span>
-myModule.config(<span class="keyword">function</span>($locationProvider) {
-  <span class="comment">// Configure existing providers</span>
-  $locationProvider.hashPrefix(<span class="string">'!'</span>);
-});</code></pre>
+...
+
+<span class="keyword">var</span> otherModule = angular.module(<span class="string">'myCompany.otherModule'</span>, [<span class="string">'myCompany.myModule'</span>])
+
+...</code></pre>
 </li>
 <li><strong>jQuery</strong>: Plugin-style modules<pre><code class="lang-javascript">jQuery.fn.myPlugin = <span class="keyword">function</span>() {
   <span class="comment">// Do your awesome plugin stuff here</span>
@@ -295,46 +293,41 @@ myModule.config(<span class="keyword">function</span>($locationProvider) {
 </li>
 <li><strong>Concatenation</strong>: Let the build system concatenate files. Problematic because of potential namespace collisions, dependency ordering issues, no easy debug/production build, and potential for missing dependencies or sub-dependencies</li>
 </ul>
-<h2>Advice</h2>
-<h3>AJAX</h3>
-<ul>
-<li>Don&#39;t allow get requests to modify data, use proper verbs for requests POST, GET, DELETE, PUT, etc. </li>
-<li>All developers should have basic awareness of XSS attacks, just like SQL injection..</li>
-<li>Sanitize HTML before embedding in page
-<a href="http://ejohn.org/blog/re-securing-json/">http://ejohn.org/blog/re-securing-json/</a></li>
-</ul>
-<h3>API&#39;s</h3>
-<ul>
-<li>Try to build services as nouns, not verbs (REST)</li>
-<li>Each service should be self-explanatory by name</li>
-</ul>
-<h3>Single-Page Applications</h3>
-<ul>
-<li>Offline-friendly</li>
-<li>Complete control of user experience</li>
-<li>Clear boundary when separating concerns/responsibilities</li>
-<li>Responsive/Progressive Enhancement well-suited to client-side</li>
-<li>Smaller communication payloads between client and server</li>
-</ul>
+<h2>Frameworks</h2>
 <h3>jQuery</h3>
-<p>jQuery ($) is the most ubiquitous library known to all JavaScript-kind. jQuery is so successful because it abstracts much of the complexity of web development away. The DOM API is extremely tedious, and so is working with XMLHttpRequests. It is also an extremely elegant framework: all jQuery objects are arrays of DOM elements at their core, and can be indexed and manipulated as such. Also, each jQuery operation on an object can be chained; the resulting code can be quite terse and powerful. A few must-knows:</p>
+<p>jQuery ($) is the most ubiquitous library known to all JavaScript-kind. jQuery is successful because it abstracts away complexity; the native DOM and XMLHttpRequest APIs are extremely tedious and prone to browser-specific differences. jQuery is also an extremely elegant framework: all jQuery objects are arrays of DOM elements at their core, and can be indexed and manipulated as such. Also, each jQuery operation on an object can be chained; the resulting code can be quite terse and powerful. A few must-knows:</p>
 <ul>
 <li>The library can be called either <code>jQuery</code> or <code>$</code> (or a custom name in no-conflict mode). The dollar sign is convention, and is a legal identifier in JavaScript.</li>
 <li><code>$(function(){...})</code> is jQuery&#39;s shortcut for <code>$(document).ready</code>. When the browser has fully parsed the DOM, this function will be called. At this point its safe to start loading data and manipulating the DOM.</li>
-<li>Events are easy, too. Traditionally browser events have differed across browsers, and handling them was tedious. jQuery standardizes the behaviour and simplifies calls to register handlers.</li>
-<li><code>Sizzle</code> is a library jQuery uses for CSS Selection.  It is fast and flexible. jQuery shortcuts selection using <code>$(&#39;.somethingtoselect&#39;)</code></li>
-<li>jQuery also shortcuts element creation. When you call <code>$(&#39;&lt;div&gt;&#39;)</code>, it creates an element with the tag name you specify.</li>
+<li>Events are easy, too. Traditionally, browser events have differed across browsers, and handling them was tedious. jQuery standardizes the behaviour and simplifies calls to register handlers. Some events that you can subscribe to are:<ul>
+<li>mouse: <code>click</code></li>
+<li>input: <code>blur</code></li>
+<li>mouse: <code>hover</code></li>
+<li>input: <code>change</code></li>
+</ul>
+</li>
+<li><code>Sizzle</code> is a fast and flexible library used for CSS Selection. When using jQuery with a string that isn&#39;t a html tag (<code>$(&#39;.somethingtoselect&#39;)</code>), you&#39;re using Sizzle. It <a href="https://github.com/jquery/sizzle/wiki/Sizzle-Documentation">supports virtually all CSS selectors</a>.</li>
+<li>When jQuery is called with a string tag name in angle brackets, it creates an element instead of selecting. This can be a handy way to create elements like <code>$(&#39;&lt;div&gt;&#39;)</code>. The result is equivalent to using <code>$(document.createElement(&#39;div&#39;))</code></li>
 </ul>
 <p>A jQuery example that creates a div element, sets its text property, adds a click handler to it, and appends it to the page:</p>
-<pre><code>$('body').append(
-  $('&lt;<span class="keyword">div</span>&gt;').<span class="type">text</span>('A <span class="keyword">div</span> footer').click(function(){
-    alert('You clicked <span class="keyword">me</span>!');
+<pre><code class="lang-javascript">$(<span class="string">'body'</span>).append(
+  $(<span class="string">'&lt;div&gt;'</span>).text(<span class="string">'A div footer'</span>).addClass(<span class="string">'footer'</span>).click(<span class="keyword">function</span>(event){
+    alert(<span class="string">'You clicked me!'</span>);
   });
 );</code></pre>
+<p>Using native JavaScript methods would be far less terse, and requires creating a lot of intermediate variables without chaining: </p>
+<pre><code class="lang-javascript"><span class="keyword">var</span> newDiv = document.createElement(<span class="string">'div'</span>);
+newDiv.innerText = <span class="string">'A div footer'</span>;
+newDiv.className = <span class="string">'footer'</span>;
+newDiv.onclick = <span class="keyword">function</span>() {
+  alert(<span class="string">'You clicked me!'</span>);
+};
+
+document.body.appendChild(newDiv);</code></pre>
 <h3>Other Frameworks</h3>
 <p>There is a cornucopia of different MV* Frameworks. A few examples for the record:</p>
 <h4>Ember.js</h4>
-<p>Uses traditional MVC Structure. Uses templates, Models, Views, Controllers which extend from Ember&#39;s objects.</p>
+<p>Uses traditional MVC structure. Templates, Models, Views, Controllers can all be defined and managed similar to Backbone or Knockout. Expect to see a lot of</p>
 <pre><code class="lang-html"><span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/x-handlebars"</span>&gt;</span><span class="javascript">
     {{view Ember.TextField valueBinding=<span class="string">"App.radio1"</span>}}
 </span><span class="tag">&lt;/<span class="title">script</span>&gt;</span></code></pre>
@@ -349,11 +342,9 @@ $(<span class="string">'.thingy'</span>).typeahead();
 }
 
 $(<span class="string">'body'</span>).append(widget(<span class="string">'something'</span>));</code></pre>
-<p>The major disadvantage to this style of development aside from some major inconsistency is that there is no binding. UI elements must be refreshed manually when changes are made to the model.</p>
+<p>The major disadvantage to this style of development aside from its inherent inconsistency is that there is no binding. UI elements must be refreshed manually when changes are made to the model.</p>
 <h4>Angular</h4>
 <p>Angular is a unique library because it uses the DOM instead of templates to define the app. It also makes heavy use of dependency injection which solves a lot of standard web development problems like passing around dependencies.</p>
-<h4>Others</h4>
-<p>Knockout and Backbone take a similar approach to Ember; the basics will be the same, but syntax slightly different.</p>
 <h3>Make-your-life-easier Libraries</h3>
 <h4>Underscore (lodash.js)</h4>
 <p>Underscore gives developers some handy functions that aren&#39;t available in JavaScript natively. Examples are:</p>
@@ -365,19 +356,19 @@ $(<span class="string">'body'</span>).append(widget(<span class="string">'someth
 <p>Some of the methods will be supported natively in future versions of JS, or may be included in jQuery or Angular, but these libraries are useful polyfills nonetheless.</p>
 <h4>Bootstrap</h4>
 <p>Bootstrap is the single most popular scaffolding library known to the internet. It is a favourite because it is developed by some smart people at Twitter and because it does a good job at reducing boilerplate while staying extremely configurable. It should be a part of every new project.</p>
-<h3>Tools</h3>
-<h4>Chrome Web Inspector</h4>
+<h2>Tools</h2>
+<h3>Chrome Web Inspector</h3>
 <ul>
-<li>better inspector, live update, undo, good debugger<ul>
+<li>better inspector, live update, undo, good debugger</li>
 <li>$0 </li>
 </ul>
-</li>
-</ul>
-<h4>jsFiddle</h4>
-<h4>Responsive bookmarklet: <a href="http://responsive.victorcoulon.fr/">http://responsive.victorcoulon.fr/</a></h4>
-<h4>Node.js (command line)</h4>
-<h4>Yeoman for scaffolding and mocking up</h4>
-<h3>Testing in JS</h3>
+<h3>jsFiddle</h3>
+<p>jsFiddle, jsBin, jsConsole, jsPerf. There are hundreds of sites dedicated to making your development easier.</p>
+<h3>Node.js (command line)</h3>
+<p>If you are curious, there is an easy way to play around with JavaScript without the need for even a browser. Grab node.js from the <a href="http://nodejs.org/download/">download site</a>. It uses Chrome&#39;s V8 JavaScript engine, and has a Command Line Interface (CLI) you can run by typing <code>node</code>.</p>
+<h3>Yeoman for scaffolding and mocking up</h3>
+<p>Yeoman is a scaffolding tool that allows developers to build the skeleton of an app effortlessly.</p>
+<h2>Testing in JS</h2>
 <p>As the size of JavaScript projects has grown, there has been more need to use frameworks for testing. A few of the most popular:</p>
 <ul>
 <li><p><strong>Jasmine</strong>: A visual testing framework for testing in a BDD style</p>
@@ -387,11 +378,11 @@ $(<span class="string">'body'</span>).append(widget(<span class="string">'someth
 </ul>
 <p><strong>Does your Web App need unit tests?</strong> If there is a lot of business logic on client side, you may want to create a suite of tests. Their purpose is two-fold: ensuring consistent behaviour after changes are made, and documenting the important behaviour of the app.
 Write tests for things that you or team could easily break or where mistakes could happen. When you find bugs, write tests to ensure they don&#39;t come back.</p>
-<h3>General Advice</h3>
+<h2>General Advice</h2>
 <ul>
 <li>After deciding which browsers to support, test, test, test on those platforms to squish any cross-platform issues.</li>
 <li>Start responsive, progressively enhance experience. In all design decisions, keep mobile users in mind.</li>
-<li>Avoid highly customized controls; disastrous consequences in maintainability</li>
+<li>Avoid highly customized controls as they can have disastrous consequences in maintainability.</li>
 <li>Don&#39;t be afraid to customize libraries to your needs, but make sure your changes are future-proof by keeping your changes in source control.</li>
 <li>Know your tools; spend time in your IDE, on the command line, and in Web Inspector</li>
 <li>Try to keep the cycle between making changes and viewing the results as close as possible. Use tools like live-reload, run tests when files change, etc</li>
