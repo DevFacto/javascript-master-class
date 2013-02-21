@@ -29,7 +29,7 @@ function b(parameter) {
 var c = b(a);
 ```
 
-###Qurks
+###Quirks
 
 JavaScript is famous for its quirks, made possible through its aggressive type coersion. [The WAT Video](http://www.youtube.com/watch?v=kXEgk1Hdze0) by Gary Bernhardt goes over a few.
 
