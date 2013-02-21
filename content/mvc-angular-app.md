@@ -35,7 +35,7 @@ Close the nuget package manager for now.
 - Navigate to ~/App_Start/BundleConfig.cs
 - Remove the jqueryui bundle, and add our own for bootstrap and angular
 
-````
+```cs
 public static void RegisterBundles(BundleCollection bundles)
 {
     bundles.Add(new StyleBundle("~/Content/bootstrap")
@@ -56,7 +56,8 @@ public static void RegisterBundles(BundleCollection bundles)
 
     bundles.Add(new ScriptBundle("~/bundles/angular-app")
     	.IncludeDirectory("~/Scripts/app", "*.js", true));
-}````
+}
+```
 
 
 ###Clean up our Index view. 
@@ -70,7 +71,7 @@ We're not going to render anything server side, so…
 ###Set up our layout to host our app
 - In ~/Views/Shared/_Layout.html, let's modify the content to look like this:
 
-````
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -100,7 +101,8 @@ We're not going to render anything server side, so…
         @Scripts.Render("~/bundles/angular-app")
         @RenderSection("scripts", required: false)
     </body>
-</html>````
+</html>
+```
 
 The important things to note are that we added the ng-app attribute to the body and we added a div with the ng-view attribute. We don't have an app yet or a view… but we'll do that right aways!  We've also update to include our new bundles so that the javascript we create will get delivered properly..  if you build and run the project now (F5), you should see a blank page with a simple header reading "Angular App".
 
@@ -109,7 +111,7 @@ Let's get started creating our angular app so that ng-app attribute actually has
 - Create a javascript file, called app.js in the ~/Scripts/app folder
 - Let's create our first module by adding the following code to this file:
 
-````
+```javascript
 'use strict';
 
 var myApp = angular.module('myApp', []);
@@ -128,27 +130,28 @@ myApp.config(['$routeProvider', function ($routeProvider) {
 
 myApp.run(['$rootScope', function($rootScope) {
 
-}]);````
+}]);
+```
 
 ###NEXT!!
 Now, we've defined our module, our app, and we've defined some routes. We've said that for the default route, we want to render a home view. Remember the ng-view we defined in the template… this configuration will determine what content gets placed there depending on the route URL in the browser. But, we haven't created our view template or controller yet!
 
 - Create an html file at ~/Scripts/app/views/home.html and replace the default content with the following:
 
- ````
+ ```html
  <div class="span12">    
     {{message}}
 </div>
-````
+```
 
 - Create a JavaScript file at ~/Scripts/app/controllers/home.js and add the following content:
 
-````
+```html
 'use strict';
 myApp.controller('HomeCtrl', ['$scope', function($scope) {
 	$scope.message = “Hello worrrrllld”;    
 }]);
-````
+```
 
 ###It's ALIVE!!
 Now, if you rebuild your app and run it, you should see the page rendered with the text from our home view. Interesting? Probably not yet.
@@ -160,7 +163,7 @@ Let's see if we can do something more interesting and get something from the ser
 
 How many hello worlds would you like?
 
-````
+```cs
 public IEnumerable<string> Get()
 {
     return new string[] { 
@@ -171,11 +174,11 @@ public IEnumerable<string> Get()
         "Hello World 5"
     };
 }
-````
+```
 
 - Let's also add some code to our angular controller at home.js:
 
-````
+```javascript
 myApp.controller('HomeCtrl', ['$scope', function ($scope, $http) {
     $scope.message = "hello worrrllld";
 
@@ -183,10 +186,10 @@ myApp.controller('HomeCtrl', ['$scope', function ($scope, $http) {
         $scope.messages = data;
     });
 }]);
-````
+```
 
 - And let's see if we can display that in our view too. Adjust the template in your home.html file:
-````
+```html
 <div class="span12">
     {{message}}
 
@@ -196,6 +199,6 @@ myApp.controller('HomeCtrl', ['$scope', function ($scope, $http) {
         </li>
     </ul>
 </div>
-````
+```
 
 Oh SNAP!

@@ -61,26 +61,26 @@
 <li>Navigate to ~/App_Start/BundleConfig.cs</li>
 <li>Remove the jqueryui bundle, and add our own for bootstrap and angular</li>
 </ul>
-<pre><code>public static void RegisterBundles(BundleCollection bundles)
+<pre><code class="lang-cs"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> RegisterBundles(BundleCollection bundles)
 {
-    bundles<span class="preprocessor">.Add</span>(new StyleBundle(<span class="string">"~/Content/bootstrap"</span>)
-        <span class="preprocessor">.Include</span>(<span class="string">"~/Content/bootstrap.css"</span>, 
-        <span class="string">"~/Content/bootstrap-responsive.css"</span>))<span class="comment">;</span>
+    bundles.Add(<span class="keyword">new</span> StyleBundle(<span class="string">"~/Content/bootstrap"</span>)
+        .Include(<span class="string">"~/Content/bootstrap.css"</span>, 
+        <span class="string">"~/Content/bootstrap-responsive.css"</span>));
 
-    bundles<span class="preprocessor">.Add</span>(new StyleBundle(<span class="string">"~/Content/css"</span>)
-        <span class="preprocessor">.Include</span>(<span class="string">"~/Content/Site.css"</span>))<span class="comment">;</span>
+    bundles.Add(<span class="keyword">new</span> StyleBundle(<span class="string">"~/Content/css"</span>)
+        .Include(<span class="string">"~/Content/Site.css"</span>));
 
-    bundles<span class="preprocessor">.Add</span>(new ScriptBundle(<span class="string">"~/bundles/jquery"</span>)
-        <span class="preprocessor">.Include</span>(<span class="string">"~/Scripts/jquery-{version}.js"</span>))<span class="comment">;</span>
+    bundles.Add(<span class="keyword">new</span> ScriptBundle(<span class="string">"~/bundles/jquery"</span>)
+        .Include(<span class="string">"~/Scripts/jquery-{version}.js"</span>));
 
-    bundles<span class="preprocessor">.Add</span>(new ScriptBundle(<span class="string">"~/bundles/bootstrap"</span>)
-        <span class="preprocessor">.Include</span>(<span class="string">"~/Scripts/bootstrap.js"</span>))<span class="comment">;</span>
+    bundles.Add(<span class="keyword">new</span> ScriptBundle(<span class="string">"~/bundles/bootstrap"</span>)
+        .Include(<span class="string">"~/Scripts/bootstrap.js"</span>));
 
-    bundles<span class="preprocessor">.Add</span>(new ScriptBundle(<span class="string">"~/bundles/angular"</span>)
-        <span class="preprocessor">.Include</span>(<span class="string">"~/Scripts/angular.js"</span>))<span class="comment">;</span>
+    bundles.Add(<span class="keyword">new</span> ScriptBundle(<span class="string">"~/bundles/angular"</span>)
+        .Include(<span class="string">"~/Scripts/angular.js"</span>));
 
-    bundles<span class="preprocessor">.Add</span>(new ScriptBundle(<span class="string">"~/bundles/angular-app"</span>)
-        <span class="preprocessor">.IncludeDirectory</span>(<span class="string">"~/Scripts/app"</span>, <span class="string">"*.js"</span>, true))<span class="comment">;</span>
+    bundles.Add(<span class="keyword">new</span> ScriptBundle(<span class="string">"~/bundles/angular-app"</span>)
+        .IncludeDirectory(<span class="string">"~/Scripts/app"</span>, <span class="string">"*.js"</span>, <span class="keyword">true</span>));
 }</code></pre>
 <h3>Clean up our Index view.</h3>
 <p>We&#39;re not going to render anything server side, so…</p>
@@ -95,7 +95,7 @@
 <ul>
 <li>In ~/Views/Shared/_Layout.html, let&#39;s modify the content to look like this:</li>
 </ul>
-<pre><code><span class="doctype">&lt;!DOCTYPE html&gt;</span>
+<pre><code class="lang-html"><span class="doctype">&lt;!DOCTYPE html&gt;</span>
 <span class="tag">&lt;<span class="title">html</span> <span class="attribute">lang</span>=<span class="value">"en"</span>&gt;</span>
 <span class="tag">&lt;<span class="title">head</span>&gt;</span>
     <span class="tag">&lt;<span class="title">meta</span> <span class="attribute">charset</span>=<span class="value">"utf-8"</span> /&gt;</span>
@@ -130,13 +130,13 @@
 <p>Let&#39;s get started creating our angular app so that ng-app attribute actually has something to grab onto.
 - Create a javascript file, called app.js in the ~/Scripts/app folder
 - Let&#39;s create our first module by adding the following code to this file:</p>
-<pre><code><span class="string">'use strict'</span>;
+<pre><code class="lang-javascript"><span class="string">'use strict'</span>;
 
 <span class="keyword">var</span> myApp = angular.module(<span class="string">'myApp'</span>, []);
 
-myApp.config([<span class="string">'$routeProvider'</span>, <span class="function"><span class="keyword">function</span> <span class="params">(<span class="variable">$routeProvider</span>)</span> {</span>
+myApp.config([<span class="string">'$routeProvider'</span>, <span class="function"><span class="keyword">function</span> <span class="params">($routeProvider)</span> {</span>
     <span class="comment">//Set up routes</span>
-    <span class="variable">$routeProvider</span>
+    $routeProvider
         .when(<span class="string">'/'</span>, {
             templateUrl: <span class="string">'/Scripts/app/views/home.html'</span>,
             controller: <span class="string">'HomeCtrl'</span>
@@ -146,21 +146,21 @@ myApp.config([<span class="string">'$routeProvider'</span>, <span class="functio
         });
    } ]);
 
-myApp.run([<span class="string">'$rootScope'</span>, function(<span class="variable">$rootScope</span>) {
+myApp.run([<span class="string">'$rootScope'</span>, <span class="keyword">function</span>($rootScope) {
 
 }]);</code></pre>
 <h3>NEXT!!</h3>
 <p>Now, we&#39;ve defined our module, our app, and we&#39;ve defined some routes. We&#39;ve said that for the default route, we want to render a home view. Remember the ng-view we defined in the template… this configuration will determine what content gets placed there depending on the route URL in the browser. But, we haven&#39;t created our view template or controller yet!</p>
 <ul>
 <li><p>Create an html file at ~/Scripts/app/views/home.html and replace the default content with the following:</p>
-<pre><code><span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"span12"</span>&gt;</span>    
+<pre><code class="lang-html"><span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"span12"</span>&gt;</span>    
   <span class="variable">{{message}}</span>
 <span class="tag">&lt;/<span class="title">div</span>&gt;</span></code></pre>
 </li>
 <li><p>Create a JavaScript file at ~/Scripts/app/controllers/home.js and add the following content:</p>
 </li>
 </ul>
-<pre><code><span class="xml">'use strict';
+<pre><code class="lang-html"><span class="xml">'use strict';
 myApp.controller('HomeCtrl', ['</span><span class="variable">$scope</span><span class="xml">', function(</span><span class="variable">$scope</span><span class="xml">) {
     </span><span class="variable">$scope.message</span><span class="xml"> = “Hello worrrrllld”;    
 }]);</span></code></pre>
@@ -172,7 +172,7 @@ myApp.controller('HomeCtrl', ['</span><span class="variable">$scope</span><span 
 <li>Go to the default Web API controller created for us at ~/Controllers/ValuesController.cs. It&#39;s a silly name, but let’s work with it for now. Let&#39;s modify the Get() method a bit…</li>
 </ul>
 <p>How many hello worlds would you like?</p>
-<pre><code><span class="keyword">public</span> IEnumerable&lt;<span class="keyword">string</span>&gt; Get()
+<pre><code class="lang-cs"><span class="keyword">public</span> IEnumerable&lt;<span class="keyword">string</span>&gt; Get()
 {
     <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">string</span>[] { 
         <span class="string">"Hello World 1"</span>, 
@@ -185,16 +185,16 @@ myApp.controller('HomeCtrl', ['</span><span class="variable">$scope</span><span 
 <ul>
 <li>Let&#39;s also add some code to our angular controller at home.js:</li>
 </ul>
-<pre><code>myApp.controller(<span class="string">'HomeCtrl'</span>, [<span class="string">'$scope'</span>, <span class="function"><span class="keyword">function</span> <span class="params">(<span class="variable">$scope</span>, <span class="variable">$http</span>)</span> {</span>
-    <span class="variable">$scope</span>.message = <span class="string">"hello worrrllld"</span>;
+<pre><code class="lang-javascript">myApp.controller(<span class="string">'HomeCtrl'</span>, [<span class="string">'$scope'</span>, <span class="function"><span class="keyword">function</span> <span class="params">($scope, $http)</span> {</span>
+    $scope.message = <span class="string">"hello worrrllld"</span>;
 
-    <span class="variable">$http</span>.get(<span class="string">'/api/Values'</span>).success(<span class="function"><span class="keyword">function</span> <span class="params">(data)</span> {</span>
-        <span class="variable">$scope</span>.messages = data;
+    $http.get(<span class="string">'/api/Values'</span>).success(<span class="function"><span class="keyword">function</span> <span class="params">(data)</span> {</span>
+        $scope.messages = data;
     });
 }]);</code></pre>
 <ul>
 <li><p>And let&#39;s see if we can display that in our view too. Adjust the template in your home.html file:</p>
-<pre><code><span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"span12"</span>&gt;</span>
+<pre><code class="lang-html"><span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"span12"</span>&gt;</span>
   <span class="variable">{{message}}</span>
 
   <span class="tag">&lt;<span class="title">ul</span>&gt;</span>
