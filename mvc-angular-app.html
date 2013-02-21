@@ -78,7 +78,7 @@
         .Include(<span class="string">"~/Scripts/bootstrap.js"</span>));
 
     bundles.Add(<span class="keyword">new</span> ScriptBundle(<span class="string">"~/bundles/angular"</span>)
-        .Include(<span class="string">"~/Scripts/angular.js"</span>));
+        .Include(<span class="string">"~/Scripts/angular.js"</span>, <span class="string">"~/Scripts/angular-resource.js"</span>));
 
     bundles.Add(<span class="keyword">new</span> ScriptBundle(<span class="string">"~/bundles/angular-app"</span>)
         .IncludeDirectory(<span class="string">"~/Scripts/app"</span>, <span class="string">"*.js"</span>, <span class="keyword">true</span>));
@@ -175,13 +175,13 @@ angular.module(<span class="string">'myApp.controller'</span>, []).controller(<s
     };
 }</code></pre>
 <p>Let&#39;s also add some code to our angular controller at <strong>home.js</strong>:</p>
-<pre><code class="lang-javascript">myApp.controller(<span class="string">'HomeCtrl'</span>, [<span class="string">'$scope'</span>, <span class="string">'$http'</span>, <span class="function"><span class="keyword">function</span> <span class="params">($scope, $http)</span> {</span>
-    $scope.title = <span class="string">"List of animals"</span>;
+<pre><code class="lang-javascript">angular.module(<span class="string">'myApp.controller'</span>, [<span class="string">'ngResource'</span>]).controller(<span class="string">'HomeCtrl'</span>, <span class="function"><span class="keyword">function</span> <span class="params">($scope, $resource)</span> {</span>
 
-    $http.get(<span class="string">'/api/Values'</span>).success(<span class="function"><span class="keyword">function</span> <span class="params">(data)</span> {</span>
-        $scope.animals = data;
+    <span class="keyword">var</span> Animal = $resource(<span class="string">'/api/Values/:type'</span>);
+    <span class="keyword">var</span> values = Animal.query(<span class="function"><span class="keyword">function</span> <span class="params">(animals)</span> {</span>
+        $scope.animals = animals;
     });
-}]);</code></pre>
+});</code></pre>
 <p>And let&#39;s see if we can display that in our view too. Adjust the template in your <strong>home.html</strong> file:</p>
 <pre><code class="lang-html"><span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"span12"</span>&gt;</span>
     <span class="variable">{{title}}</span>
