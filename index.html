@@ -33,7 +33,7 @@
 <h2>Overview</h2>
 <h3>What is it?</h3>
 <ul>
-<li>An interpreted programming language</li>
+<li>An <a href="http://en.wikipedia.org/wiki/Interpreted_language">interpreted</a> programming language</li>
 <li>Enables HTTP requests, DOM manipulation, user interaction in the browser</li>
 <li>Grew to be most popular programming language* </li>
 <li>Is now used on client and server (Node.js)</li>
@@ -101,9 +101,15 @@ console.log(a); <span class="comment">//3</span></code></pre>
 <li><p>Array extras</p>
 <pre><code class="lang-javascript"><span class="keyword">var</span> a = [<span class="string">'one'</span>, <span class="string">'two'</span>, <span class="string">'three'</span>, <span class="string">'four'</span>, <span class="string">'five'</span>]
 
-<span class="keyword">var</span> containO = a.filter(<span class="keyword">function</span>(item){ <span class="keyword">return</span> item.indexOf(<span class="string">'o'</span>) != -<span class="number">1</span>; }); <span class="comment">// ['one', 'two', 'four'];</span>
+<span class="keyword">var</span> containO = a.filter(
+          <span class="keyword">function</span>(item){ 
+            <span class="keyword">return</span> item.indexOf(<span class="string">'o'</span>) != -<span class="number">1</span>; 
+          }); <span class="comment">// ['one', 'two', 'four'];</span>
 
-<span class="keyword">var</span> someHaveFiveLetters = a.some(<span class="keyword">function</span>(item){ <span class="keyword">return</span> item.length &gt; <span class="number">4</span>; }); <span class="comment">//true</span></code></pre>
+<span class="keyword">var</span> someHaveFiveLetters = a.some(
+          <span class="keyword">function</span>(item){ 
+            <span class="keyword">return</span> item.length &gt; <span class="number">4</span>; 
+          }); <span class="comment">//true</span></code></pre>
 </li>
 <li><p>Object.create</p>
 <pre><code class="lang-javascript"><span class="function"><span class="keyword">function</span> <span class="title">Animal</span><span class="params">()</span> {</span>
@@ -149,7 +155,7 @@ Cat.prototype = <span class="keyword">new</span> ctor();
 <li>Destructuring Assignment</li>
 </ul>
 <h2>Dirty Details</h2>
-<h3>undefined, null and checking for values</h3>
+<h3>undefined, null, and truthy/falsy</h3>
 <p>In JavaScript, <code>undefined</code> means a variable has been declared but has not yet been assigned a value. This variable can be anywhere in the current function (scope) since it will be &#39;hoisted&#39;.</p>
 <pre><code class="lang-javascript"><span class="keyword">var</span> TestVar;
 alert(TestVar); <span class="comment">//shows undefined</span>
@@ -219,12 +225,13 @@ obj.a <span class="comment">//3</span></code></pre>
 <blockquote>
 <p>In computer science, a closure is a first-class function with free variables that are bound in the lexical environment.</p>
 </blockquote>
-<p>&mdash; Mark Thiessen, Computer Scientist</p>
+<p>&mdash; Mark Thiessen, Computing Scientist, when he quoted <a href="http://bit.ly/4Iou">wikipedia</a></p>
 <p>Basically, JavaScript allows functions to reference variables outside their own scope. Doing so is similar to using parameters where parameters are bound to another scope.</p>
 <pre><code class="lang-javascript"><span class="keyword">var</span> getPairFormatter= <span class="keyword">function</span>(){
   <span class="keyword">var</span> format= <span class="string">"{key} -&gt; {value}"</span>;
   <span class="keyword">return</span> <span class="keyword">function</span>(obj){
-    <span class="keyword">return</span> format.replace(<span class="string">'{key}'</span>, obj.key).replace(<span class="string">'{value}'</span>, obj.value);
+    <span class="keyword">return</span> format.replace(<span class="string">'{key}'</span>, obj.key)
+                 .replace(<span class="string">'{value}'</span>, obj.value);
   };
 }
 <span class="keyword">var</span> formatter = getPairFormatter();
@@ -318,12 +325,18 @@ myModule.config(<span class="keyword">function</span>($locationProvider) {
 <h3>jQuery</h3>
 <p>jQuery ($) is the most ubiquitous library known to all JavaScript-kind. jQuery is so successful because it abstracts much of the complexity of web development away. The DOM API is extremely tedious, and so is working with XMLHttpRequests. It is also an extremely elegant framework: all jQuery objects are arrays of DOM elements at their core, and can be indexed and manipulated as such. Also, each jQuery operation on an object can be chained; the resulting code can be quite terse and powerful. A few must-knows:</p>
 <ul>
-<li>The library can be called either <code>jQuery</code> or <code>$</code>. The dollar sign is convention, and is a legal identifier in JavaScript.</li>
+<li>The library can be called either <code>jQuery</code> or <code>$</code> (or a custom name in no-conflict mode). The dollar sign is convention, and is a legal identifier in JavaScript.</li>
 <li><code>$(function(){...})</code> is jQuery&#39;s shortcut for <code>$(document).ready</code>. When the browser has fully parsed the DOM, this function will be called. At this point its safe to start loading data and manipulating the DOM.</li>
 <li>Events are easy, too. Traditionally browser events have differed across browsers, and handling them was tedious. jQuery standardizes the behaviour and simplifies calls to register handlers.</li>
 <li><code>Sizzle</code> is a library jQuery uses for CSS Selection.  It is fast and flexible. jQuery shortcuts selection using <code>$(&#39;.somethingtoselect&#39;)</code></li>
 <li>jQuery also shortcuts element creation. When you call <code>$(&#39;&lt;div&gt;&#39;)</code>, it creates an element with the tag name you specify.</li>
 </ul>
+<p>A jQuery example that creates a div element, sets its text property, adds a click handler to it, and appends it to the page:</p>
+<pre><code>$('body').append(
+  $('&lt;<span class="keyword">div</span>&gt;').<span class="type">text</span>('A <span class="keyword">div</span> footer').click(function(){
+    alert('You clicked <span class="keyword">me</span>!');
+  });
+);</code></pre>
 <h3>Other Frameworks</h3>
 <p>There is a cornucopia of different MV* Frameworks. A few examples for the record:</p>
 <h4>Ember.js</h4>
