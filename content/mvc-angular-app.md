@@ -196,6 +196,8 @@ Let's also add some code to our angular controller at **home.js**:
 ```javascript
 angular.module('myApp.controller', ['ngResource']).controller('HomeCtrl', function ($scope, $resource) {
 
+	$scope.title = "List of Animals";   
+
     var Animal = $resource('/api/Values/:type');
     var values = Animal.query(function (animals) {
         $scope.animals = animals;
@@ -207,7 +209,6 @@ And let's see if we can display that in our view too. Adjust the template in you
 ```html
 <div class="span12">
     {{title}}
-
     <ul>
         <li ng-repeat="animal in animals">
             <span>{{animal.name}}</span>
@@ -232,7 +233,7 @@ Ok. Create another javascript file at **~/Scripts/app/directives/noisebubble.js*
 
 ```javascript
 'use strict';
-myApp.directive('noiseBubble', function () {
+angular.module('myApp.directives', []).directive('noiseBubble', function () {
     return {
         link: function (scope, elm, attrs) {
             elm.tooltip({
@@ -241,6 +242,12 @@ myApp.directive('noiseBubble', function () {
         }
     };
 });
+```
+
+Now we have to go back to our root module (app.js) and change the module definition to ensure we include 'myApp.directives' as a dependency:
+
+```javascript
+var myApp = angular.module('myApp', ['myApp.controller', 'myApp.directives']);
 ```
 
 Now that we have a sweet, sweet directive, let's update our home template:
@@ -290,5 +297,53 @@ Let's adjust our home template and create a simple form for adding animals. It s
         <input type="submit" value="Add" />
     </form>
 </div>
+```
+
+Now, let's build+run our app again (f5). Pure magic. We're getting data from the server and we've created a form that allows us to add new values inline.
+
+Oh. What about deleting?
+
+###Re-moo-ving
+Well this should be easy. You can probably already guess what we'll do here.
+
+Let's update our template first this time. Why don't we add a remove link that gets displayed next to each item:
+
+```html
+<div class="span12">
+    {{title}}
+    <ul>
+        <li ng-repeat="animal in animals">
+            <span noise-bubble noise="animal.sound">{{animal.name}}</span> 
+            <a ng-click="removeAnimal(animal)">remove</a>
+        </li>
+    </ul>
+    <form ng-submit="saveNewAnimal()">
+        <h5>Add a new animal</h5>
+        <label>Name:</label>
+        <input ng-model="newAnimal.name" />
+        <label>Sound:</label>
+        <input ng-model="newAnimal.sound" />
+        <input type="submit" value="Add" />
+    </form>
+</div>
+```
+
+And then let's add a method to our controller to handle the remove. Let's add a function to our controller - maybe something like this:
+
+```javascript
+$scope.removeAnimal = function (animal) {
+    var index = $scope.animals.indexOf(animal);
+    $scope.animals.splice(index, 1);
+};
 
 ```
+
+Refresh the browser. Amazing how simple that was.
+
+So now we can fetch, add, delete. What about edit? What about posting changes to the server? 
+
+We'll leave those as an exercise for the reader ;)
+
+Until next time...
+
+

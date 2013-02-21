@@ -177,6 +177,8 @@ angular.module(<span class="string">'myApp.controller'</span>, []).controller(<s
 <p>Let&#39;s also add some code to our angular controller at <strong>home.js</strong>:</p>
 <pre><code class="lang-javascript">angular.module(<span class="string">'myApp.controller'</span>, [<span class="string">'ngResource'</span>]).controller(<span class="string">'HomeCtrl'</span>, <span class="function"><span class="keyword">function</span> <span class="params">($scope, $resource)</span> {</span>
 
+    $scope.title = <span class="string">"List of Animals"</span>;   
+
     <span class="keyword">var</span> Animal = $resource(<span class="string">'/api/Values/:type'</span>);
     <span class="keyword">var</span> values = Animal.query(<span class="function"><span class="keyword">function</span> <span class="params">(animals)</span> {</span>
         $scope.animals = animals;
@@ -185,7 +187,6 @@ angular.module(<span class="string">'myApp.controller'</span>, []).controller(<s
 <p>And let&#39;s see if we can display that in our view too. Adjust the template in your <strong>home.html</strong> file:</p>
 <pre><code class="lang-html"><span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"span12"</span>&gt;</span>
     <span class="variable">{{title}}</span>
-
     <span class="tag">&lt;<span class="title">ul</span>&gt;</span>
         <span class="tag">&lt;<span class="title">li</span> <span class="attribute">ng-repeat</span>=<span class="value">"animal in animals"</span>&gt;</span>
             <span class="tag">&lt;<span class="title">span</span>&gt;</span><span class="variable">{{animal.name}}</span><span class="tag">&lt;/<span class="title">span</span>&gt;</span>
@@ -201,7 +202,7 @@ Hmm, problem. HTML doesn&#39;t have a built-in noise bubble.</p>
 <p><a href="http://docs.angularjs.org/guide/directive">Directives</a> to the rescue? Let&#39;s wire one up so that we can add functionality to our template declaratively.  To do the actual rendering, we can integrate bootstrap&#39;s tooltip.</p>
 <p>Ok. Create another javascript file at <strong>~/Scripts/app/directives/noisebubble.js</strong> and add the following:</p>
 <pre><code class="lang-javascript"><span class="string">'use strict'</span>;
-myApp.directive(<span class="string">'noiseBubble'</span>, <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
+angular.module(<span class="string">'myApp.directives'</span>, []).directive(<span class="string">'noiseBubble'</span>, <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
     <span class="keyword">return</span> {
         link: <span class="function"><span class="keyword">function</span> <span class="params">(scope, elm, attrs)</span> {</span>
             elm.tooltip({
@@ -210,6 +211,8 @@ myApp.directive(<span class="string">'noiseBubble'</span>, <span class="function
         }
     };
 });</code></pre>
+<p>Now we have to go back to our root module (app.js) and change the module definition to ensure we include &#39;myApp.directives&#39; as a dependency:</p>
+<pre><code class="lang-javascript"><span class="keyword">var</span> myApp = angular.module(<span class="string">'myApp'</span>, [<span class="string">'myApp.controller'</span>, <span class="string">'myApp.directives'</span>]);</code></pre>
 <p>Now that we have a sweet, sweet directive, let&#39;s update our home template:</p>
 <pre><code class="lang-html"><span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"span12"</span>&gt;</span>
   <span class="variable">{{title}}</span>
@@ -245,6 +248,37 @@ $scope.saveNewAnimal = <span class="function"><span class="keyword">function</sp
         <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"submit"</span> <span class="attribute">value</span>=<span class="value">"Add"</span> /&gt;</span>
     <span class="tag">&lt;/<span class="title">form</span>&gt;</span>
 <span class="tag">&lt;/<span class="title">div</span>&gt;</span></code></pre>
+<p>Now, let&#39;s build+run our app again (f5). Pure magic. We&#39;re getting data from the server and we&#39;ve created a form that allows us to add new values inline.</p>
+<p>Oh. What about deleting?</p>
+<h3>Re-moo-ving</h3>
+<p>Well this should be easy. You can probably already guess what we&#39;ll do here.</p>
+<p>Let&#39;s update our template first this time. Why don&#39;t we add a remove link that gets displayed next to each item:</p>
+<pre><code class="lang-html"><span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"span12"</span>&gt;</span>
+    <span class="variable">{{title}}</span>
+    <span class="tag">&lt;<span class="title">ul</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">li</span> <span class="attribute">ng-repeat</span>=<span class="value">"animal in animals"</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">span</span> <span class="attribute">noise-bubble</span> <span class="attribute">noise</span>=<span class="value">"animal.sound"</span>&gt;</span><span class="variable">{{animal.name}}</span><span class="tag">&lt;/<span class="title">span</span>&gt;</span> 
+            <span class="tag">&lt;<span class="title">a</span> <span class="attribute">ng-click</span>=<span class="value">"removeAnimal(animal)"</span>&gt;</span>remove<span class="tag">&lt;/<span class="title">a</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">ul</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">form</span> <span class="attribute">ng-submit</span>=<span class="value">"saveNewAnimal()"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">h5</span>&gt;</span>Add a new animal<span class="tag">&lt;/<span class="title">h5</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">label</span>&gt;</span>Name:<span class="tag">&lt;/<span class="title">label</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">input</span> <span class="attribute">ng-model</span>=<span class="value">"newAnimal.name"</span> /&gt;</span>
+        <span class="tag">&lt;<span class="title">label</span>&gt;</span>Sound:<span class="tag">&lt;/<span class="title">label</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">input</span> <span class="attribute">ng-model</span>=<span class="value">"newAnimal.sound"</span> /&gt;</span>
+        <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"submit"</span> <span class="attribute">value</span>=<span class="value">"Add"</span> /&gt;</span>
+    <span class="tag">&lt;/<span class="title">form</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">div</span>&gt;</span></code></pre>
+<p>And then let&#39;s add a method to our controller to handle the remove. Let&#39;s add a function to our controller - maybe something like this:</p>
+<pre><code class="lang-javascript">$scope.removeAnimal = <span class="function"><span class="keyword">function</span> <span class="params">(animal)</span> {</span>
+    <span class="keyword">var</span> index = $scope.animals.indexOf(animal);
+    $scope.animals.splice(index, <span class="number">1</span>);
+};</code></pre>
+<p>Refresh the browser. Amazing how simple that was.</p>
+<p>So now we can fetch, add, delete. What about edit? What about posting changes to the server? </p>
+<p>We&#39;ll leave those as an exercise for the reader ;)</p>
+<p>Until next time...</p>
 
       </section>
       <footer>
