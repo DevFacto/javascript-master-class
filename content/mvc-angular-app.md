@@ -40,27 +40,26 @@ We'll set these up now so we can embed our JavaScript and CSS in our page.
 ```cs
 public static void RegisterBundles(BundleCollection bundles)
 {
-    bundles.Add(new StyleBundle("~/Content/bootstrap")
-    	.Include("~/Content/bootstrap.css", 
-    	"~/Content/bootstrap-responsive.css"));
-    
-    bundles.Add(new StyleBundle("~/Content/css")
-    	.Include("~/Content/Site.css"));
+	bundles.Add(new StyleBundle("~/Content/bootstrap")
+		.Include("~/Content/bootstrap.css", 
+		"~/Content/bootstrap-responsive.css"));
+	
+	bundles.Add(new StyleBundle("~/Content/css")
+		.Include("~/Content/Site.css"));
 
-    bundles.Add(new ScriptBundle("~/bundles/jquery")
-    	.Include("~/Scripts/jquery-{version}.js"));
+	bundles.Add(new ScriptBundle("~/bundles/jquery")
+		.Include("~/Scripts/jquery-{version}.js"));
 
-    bundles.Add(new ScriptBundle("~/bundles/bootstrap")
-    	.Include("~/Scripts/bootstrap.js"));
+	bundles.Add(new ScriptBundle("~/bundles/bootstrap")
+		.Include("~/Scripts/bootstrap.js"));
 
-    bundles.Add(new ScriptBundle("~/bundles/angular")
-    	.Include("~/Scripts/angular.js"));
+	bundles.Add(new ScriptBundle("~/bundles/angular")
+		.Include("~/Scripts/angular.js"));
 
-    bundles.Add(new ScriptBundle("~/bundles/angular-app")
-    	.IncludeDirectory("~/Scripts/app", "*.js", true));
+	bundles.Add(new ScriptBundle("~/bundles/angular-app")
+		.IncludeDirectory("~/Scripts/app", "*.js", true));
 }
 ```
-
 
 ###Clean up our Index view. 
 We're not going to render anything server side, so open up ~/Views/Home/Index.cshtml and remove everything!
@@ -110,6 +109,8 @@ We don't have an app yet or a view… but we'll do that right aways!  We've also
 
 Hold on there, we're not done yet.
 
+If we open Web Inspector, we can see that we have a single error; Angular is complaining that we don't yet have a module called 'myApp'
+
 ###We need a module!
 Let's get started creating our angular app so that ng-app attribute actually has something to grab onto.
 
@@ -121,21 +122,20 @@ Create a javascript file, called app.js in the ~/Scripts/app folder and let's cr
 var myApp = angular.module('myApp', []);
 
 myApp.config(['$routeProvider', function ($routeProvider) {
-    //Set up routes
-    $routeProvider
-        .when('/', {
-            templateUrl: '/Scripts/app/views/home.html',
-            controller: 'HomeCtrl'
-        })
-        .otherwise({
-           redirectTo: '/' 
-        });
+	//Set up routes
+	$routeProvider
+		.when('/', {
+			templateUrl: '/Scripts/app/views/home.html',
+			controller: 'HomeCtrl'
+		})
+		.otherwise({
+		   redirectTo: '/' 
+		});
    } ]);
 
-myApp.run(['$rootScope', function($rootScope) {
-
-}]);
 ```
+
+What we're doing is handling routes on the client side. Since Single Page Apps don't reload the page, the URL doesn't appreciably change; instead, we use URL fragments to track logical pages. This means we define checkpoints throughout our app which are bookmarkable and navigable using the back button. In this case, we're doing the simplest possible thing: using only one endpoint (and associated controller), which is attached to the root "`/`" URL.
 
 ###NEXT!!
 Now, we've defined our module, our app, and we've defined some routes. We've said that for the default route, we want to render a home view. Remember the ng-view we defined in the template… this configuration will determine what content gets placed there depending on the route URL in the browser. But, we haven't created our view template or controller yet!
@@ -169,13 +169,13 @@ Go to the default Web API controller created for us at ~/Controllers/ValuesContr
 ```cs
 public IEnumerable<string> Get()
 {
-    return new string[] { 
-        "Hello World 1", 
-        "Hello World 2", 
-        "Hello World 3", 
-        "Hello World 4", 
-        "Hello World 5"
-    };
+	return new string[] { 
+		"Hello World 1", 
+		"Hello World 2", 
+		"Hello World 3", 
+		"Hello World 4", 
+		"Hello World 5"
+	};
 }
 ```
 
@@ -185,11 +185,11 @@ Let's also add some code to our angular controller at home.js:
 
 ```javascript
 myApp.controller('HomeCtrl', ['$scope', function ($scope, $http) {
-    $scope.message = "hello worrrllld";
+	$scope.message = "hello worrrllld";
 
-    $http.get('/api/Values').success(function (data) {
-        $scope.messages = data;
-    });
+	$http.get('/api/Values').success(function (data) {
+		$scope.messages = data;
+	});
 }]);
 ```
 

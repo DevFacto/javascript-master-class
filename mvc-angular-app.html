@@ -122,6 +122,7 @@
 <p>The important things to note are that we added the ng-app attribute to the body and we added a div with the ng-view attribute. </p>
 <p>We don&#39;t have an app yet or a view… but we&#39;ll do that right aways!  We&#39;ve also updated the page to include our new bundles so that the JavaScript and CSS we create will get delivered properly..  if you build and run the project now (F5), you should see a blank page with a simple header reading &quot;Angular App&quot;. </p>
 <p>Hold on there, we&#39;re not done yet.</p>
+<p>If we open Web Inspector, we can see that we have a single error; Angular is complaining that we don&#39;t yet have a module called &#39;myApp&#39;</p>
 <h3>We need a module!</h3>
 <p>Let&#39;s get started creating our angular app so that ng-app attribute actually has something to grab onto.</p>
 <p>Create a javascript file, called app.js in the ~/Scripts/app folder and let&#39;s create our first module by adding the following code to this file:</p>
@@ -139,11 +140,8 @@ myApp.config([<span class="string">'$routeProvider'</span>, <span class="functio
         .otherwise({
            redirectTo: <span class="string">'/'</span> 
         });
-   } ]);
-
-myApp.run([<span class="string">'$rootScope'</span>, <span class="keyword">function</span>($rootScope) {
-
-}]);</code></pre>
+   } ]);</code></pre>
+<p>What we&#39;re doing is handling routes on the client side. Since Single Page Apps don&#39;t reload the page, the URL doesn&#39;t appreciably change; instead, we use URL fragments to track logical pages. This means we define checkpoints throughout our app which are bookmarkable and navigable using the back button. In this case, we&#39;re doing the simplest possible thing: using only one endpoint (and associated controller), which is attached to the root &quot;<code>/</code>&quot; URL.</p>
 <h3>NEXT!!</h3>
 <p>Now, we&#39;ve defined our module, our app, and we&#39;ve defined some routes. We&#39;ve said that for the default route, we want to render a home view. Remember the ng-view we defined in the template… this configuration will determine what content gets placed there depending on the route URL in the browser. But, we haven&#39;t created our view template or controller yet!</p>
 <p>Create an html file at ~/Scripts/app/views/home.html and replace the default content with the following:</p>
