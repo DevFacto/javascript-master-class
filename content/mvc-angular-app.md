@@ -116,6 +116,8 @@ If we open Web Inspector, we can see that we have a single error; Angular is com
 ###We need a module!
 Let's get started creating our angular app so that ng-app attribute actually has something to grab onto.
 
+A module is Angular's way of separating different concerns. Each file of our app can define its own module or can rely on the default module by accessing the myApp variable by name.
+
 Create a javascript file, called **app.js** in the **~/Scripts/app** folder and let's create our first module by adding the following code:
 
 ```javascript
@@ -140,23 +142,29 @@ myApp.config(['$routeProvider', function ($routeProvider) {
 What we're doing is handling routes on the client side. Since Single Page Apps don't reload the page, the URL doesn't appreciably change; instead, we use URL fragments to track logical pages. This means we define checkpoints throughout our app which are bookmarkable and navigable using the back button. In this case, we're doing the simplest possible thing: using only one endpoint (and associated controller), which is attached to the root "`/`" URL.
 
 ###NEXT!!
-Now, we've defined our module, our app, and we've defined some routes. We've said that for the default route, we want to render a home view. Remember the ng-view we defined in the template… this configuration will determine what content gets placed there depending on the route URL in the browser. But, we haven't created our view template or controller yet!
+We've defined our module, our app, and we've defined some routes. Remember the ng-view we defined in the template? This configuration will determine what content gets placed there depending on the route URL in the browser. But, we haven't created our view template or controller yet!
 
 Create an html file at **~/Scripts/app/views/home.html** and replace the default content with the following:
 
- ```html
- <div class="span12">    
-    {{message}}
+```html
+<div class="span12">    
+  {{message}}
 </div>
 ```
 
 Create a JavaScript file at **~/Scripts/app/controllers/home.js** and add the following content:
 
-```html
+```javascript
 'use strict';
-myApp.controller('HomeCtrl', ['$scope', function($scope) {
-	$scope.message = “Hello worrrrllld”;    
-}]);
+angular.module('myApp.controller', []).controller('HomeCtrl', function($scope) {
+	$scope.message = "Hello worrrrllld";    
+});
+```
+
+We also have to get our app module set up. In the root module (app.js), change the module definition to include 'myApp.controller' as a dependency:
+
+```javascript
+var myApp = angular.module('myApp', ['myApp.controller']);
 ```
 
 ###It's ALIVE!!
