@@ -54,7 +54,7 @@ public static void RegisterBundles(BundleCollection bundles)
 		.Include("~/Scripts/bootstrap.js"));
 
 	bundles.Add(new ScriptBundle("~/bundles/angular")
-		.Include("~/Scripts/angular.js"));
+		.Include("~/Scripts/angular.js", "~/Scripts/angular-resource.js"));
 
 	bundles.Add(new ScriptBundle("~/bundles/angular-app")
 		.IncludeDirectory("~/Scripts/app", "*.js", true));
@@ -194,13 +194,13 @@ public IEnumerable<dynamic> Get()
 Let's also add some code to our angular controller at **home.js**:
 
 ```javascript
-myApp.controller('HomeCtrl', ['$scope', '$http', function ($scope, $http) {
-	$scope.title = "List of animals";
+angular.module('myApp.controller', ['ngResource']).controller('HomeCtrl', function ($scope, $resource) {
 
-	$http.get('/api/Values').success(function (data) {
-		$scope.animals = data;
-	});
-}]);
+    var Animal = $resource('/api/Values/:type');
+    var values = Animal.query(function (animals) {
+        $scope.animals = animals;
+    });
+});
 ```
 
 And let's see if we can display that in our view too. Adjust the template in your **home.html** file:
