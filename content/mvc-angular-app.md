@@ -146,7 +146,7 @@ Create an html file at **~/Scripts/app/views/home.html** and replace the default
 
  ```html
  <div class="span12">    
-    {{message}}
+    {{title}}
 </div>
 ```
 
@@ -155,7 +155,7 @@ Create a JavaScript file at **~/Scripts/app/controllers/home.js** and add the fo
 ```html
 'use strict';
 myApp.controller('HomeCtrl', ['$scope', function($scope) {
-	$scope.message = “Hello worrrrllld”;    
+	$scope.title = “Hello worrrrllld”;    
 }]);
 ```
 
@@ -169,28 +169,28 @@ Go to the default Web API controller created for us at **~/Controllers/ValuesCon
 
 
 ```cs
-public IEnumerable<string> Get()
+public IEnumerable<dynamic> Get()
 {
-	return new string[] { 
-		"Hello World 1", 
-		"Hello World 2", 
-		"Hello World 3", 
-		"Hello World 4", 
-		"Hello World 5"
+	return new dynamic[] { 
+		new {name="Tiger", sound="Rawrrr"}, 
+		new {name="Dog", sound="Ruff"}, 
+		new {name="Cat", sound="Meowzers"}, 
+		new {name="Duck", sound="quack"},  
+		new {name="Horse", sound="Prrbrbrbbrbr"},
+		new {name="Rabbit", sound="..."},
+		new {name="Pig", sound="SQUEEEEEEEE"}
 	};
 }
 ```
-
-How many hello worlds would you like?
 
 Let's also add some code to our angular controller at **home.js**:
 
 ```javascript
 myApp.controller('HomeCtrl', ['$scope', '$http', function ($scope, $http) {
-	$scope.message = "hello worrrllld";
+	$scope.title = "List of animals";
 
 	$http.get('/api/Values').success(function (data) {
-		$scope.messages = data;
+		$scope.animals = data;
 	});
 }]);
 ```
@@ -198,11 +198,11 @@ myApp.controller('HomeCtrl', ['$scope', '$http', function ($scope, $http) {
 And let's see if we can display that in our view too. Adjust the template in your **home.html** file:
 ```html
 <div class="span12">
-    {{message}}
+    {{title}}
 
     <ul>
-        <li ng-repeat="message in messages">
-            {{message}}
+        <li ng-repeat="animal in animals">
+            <span>{{animal.name}}</span>
         </li>
     </ul>
 </div>
@@ -213,3 +213,38 @@ If you build + run the app again, it'll. --  OH SNAP!
 We now have an angular js app that displays a simple home view, retrieves some values from the server, and displays them in a list.
 
 OK. Simple so far, but we're on our way. We've built some functional plumbing that we can extend.
+
+###Make 'em Squeal!
+You know what would be cool? What if the animal sounds were displayed when we hovered over the animal names..  but we don't want to use a lame HTML title.
+Hmm, problem. HTML doesn't have a built-in noise bubble.
+
+Directives to the rescue? Let's wire one up so that we can add functionality to our template declaratively.  To do the actual rendering, we can integrate bootstrap's tooltip.
+
+Ok. Create another javascript file at **~/Scripts/app/directives/noisebubble.js** and add the following:
+
+```javascript
+'use strict';
+myApp.directive('noiseBubble', function () {
+    return {
+        link: function (scope, elm, attrs) {
+            elm.tooltip({
+                title: scope.$eval(attrs.noise)
+            });
+        }
+    };
+});
+```
+
+Now that we have a sweet, sweet directive, let's update our home template:
+
+```html
+<div class="span12">
+  {{title}}
+    <ul>
+        <li ng-repeat="animal in animals">
+            <span noise-bubble noise="animal.sound">{{animal.name}}</span>
+        </li>
+    </ul>
+</div>
+```
+OH! THAT IS BEAUTIFUL. WHUT! 

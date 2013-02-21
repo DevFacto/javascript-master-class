@@ -147,50 +147,76 @@ myApp.config([<span class="string">'$routeProvider'</span>, <span class="functio
 <p>Now, we&#39;ve defined our module, our app, and we&#39;ve defined some routes. We&#39;ve said that for the default route, we want to render a home view. Remember the ng-view we defined in the template… this configuration will determine what content gets placed there depending on the route URL in the browser. But, we haven&#39;t created our view template or controller yet!</p>
 <p>Create an html file at <strong>~/Scripts/app/views/home.html</strong> and replace the default content with the following:</p>
 <pre><code class="lang-html"> <span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"span12"</span>&gt;</span>    
-    <span class="variable">{{message}}</span>
+    <span class="variable">{{title}}</span>
 <span class="tag">&lt;/<span class="title">div</span>&gt;</span></code></pre>
 <p>Create a JavaScript file at <strong>~/Scripts/app/controllers/home.js</strong> and add the following content:</p>
 <pre><code class="lang-html"><span class="xml">'use strict';
 myApp.controller('HomeCtrl', ['</span><span class="variable">$scope</span><span class="xml">', function(</span><span class="variable">$scope</span><span class="xml">) {
-    </span><span class="variable">$scope.message</span><span class="xml"> = “Hello worrrrllld”;    
+    </span><span class="variable">$scope.title</span><span class="xml"> = “Hello worrrrllld”;    
 }]);</span></code></pre>
 <h3>It&#39;s ALIVE!!</h3>
 <p>Now, if you rebuild your app and run it, you should see the page rendered with the text from our home view. Interesting? Mind blown? I hope not yet. That would be embarrassing.</p>
 <h3>Make it pop!</h3>
 <p>Let&#39;s see if we can do something more interesting and make it talk to the server.</p>
 <p>Go to the default Web API controller created for us at <strong>~/Controllers/ValuesController.cs</strong>. It&#39;s a silly name, but let&#39;s work with it for now. Let&#39;s modify the <strong>Get()</strong> method a bit…</p>
-<pre><code class="lang-cs"><span class="keyword">public</span> IEnumerable&lt;<span class="keyword">string</span>&gt; Get()
+<pre><code class="lang-cs"><span class="keyword">public</span> IEnumerable&lt;dynamic&gt; Get()
 {
-    <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">string</span>[] { 
-        <span class="string">"Hello World 1"</span>, 
-        <span class="string">"Hello World 2"</span>, 
-        <span class="string">"Hello World 3"</span>, 
-        <span class="string">"Hello World 4"</span>, 
-        <span class="string">"Hello World 5"</span>
+    <span class="keyword">return</span> <span class="keyword">new</span> dynamic[] { 
+        <span class="keyword">new</span> {name=<span class="string">"Tiger"</span>, sound=<span class="string">"Rawrrr"</span>}, 
+        <span class="keyword">new</span> {name=<span class="string">"Dog"</span>, sound=<span class="string">"Ruff"</span>}, 
+        <span class="keyword">new</span> {name=<span class="string">"Cat"</span>, sound=<span class="string">"Meowzers"</span>}, 
+        <span class="keyword">new</span> {name=<span class="string">"Duck"</span>, sound=<span class="string">"quack"</span>},  
+        <span class="keyword">new</span> {name=<span class="string">"Horse"</span>, sound=<span class="string">"Prrbrbrbbrbr"</span>},
+        <span class="keyword">new</span> {name=<span class="string">"Rabbit"</span>, sound=<span class="string">"..."</span>},
+        <span class="keyword">new</span> {name=<span class="string">"Pig"</span>, sound=<span class="string">"SQUEEEEEEEE"</span>}
     };
 }</code></pre>
-<p>How many hello worlds would you like?</p>
 <p>Let&#39;s also add some code to our angular controller at <strong>home.js</strong>:</p>
 <pre><code class="lang-javascript">myApp.controller(<span class="string">'HomeCtrl'</span>, [<span class="string">'$scope'</span>, <span class="string">'$http'</span>, <span class="function"><span class="keyword">function</span> <span class="params">($scope, $http)</span> {</span>
-    $scope.message = <span class="string">"hello worrrllld"</span>;
+    $scope.title = <span class="string">"List of animals"</span>;
 
     $http.get(<span class="string">'/api/Values'</span>).success(<span class="function"><span class="keyword">function</span> <span class="params">(data)</span> {</span>
-        $scope.messages = data;
+        $scope.animals = data;
     });
 }]);</code></pre>
 <p>And let&#39;s see if we can display that in our view too. Adjust the template in your <strong>home.html</strong> file:</p>
 <pre><code class="lang-html"><span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"span12"</span>&gt;</span>
-    <span class="variable">{{message}}</span>
+    <span class="variable">{{title}}</span>
 
     <span class="tag">&lt;<span class="title">ul</span>&gt;</span>
-        <span class="tag">&lt;<span class="title">li</span> <span class="attribute">ng-repeat</span>=<span class="value">"message in messages"</span>&gt;</span>
-            <span class="variable">{{message}}</span>
+        <span class="tag">&lt;<span class="title">li</span> <span class="attribute">ng-repeat</span>=<span class="value">"animal in animals"</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">span</span>&gt;</span><span class="variable">{{animal.name}}</span><span class="tag">&lt;/<span class="title">span</span>&gt;</span>
         <span class="tag">&lt;/<span class="title">li</span>&gt;</span>
     <span class="tag">&lt;/<span class="title">ul</span>&gt;</span>
 <span class="tag">&lt;/<span class="title">div</span>&gt;</span></code></pre>
 <p>If you build + run the app again, it&#39;ll. --  OH SNAP!</p>
 <p>We now have an angular js app that displays a simple home view, retrieves some values from the server, and displays them in a list.</p>
 <p>OK. Simple so far, but we&#39;re on our way. We&#39;ve built some functional plumbing that we can extend.</p>
+<h3>Make &#39;em Squeal!</h3>
+<p>You know what would be cool? What if the animal sounds were displayed when we hovered over the animal names..  but we don&#39;t want to use a lame HTML title.
+Hmm, problem. HTML doesn&#39;t have a built-in noise bubble.</p>
+<p>Directives to the rescue? Let&#39;s wire one up so that we can add functionality to our template declaratively.  To do the actual rendering, we can integrate bootstrap&#39;s tooltip.</p>
+<p>Ok. Create another javascript file at <strong>~/Scripts/app/directives/noisebubble.js</strong> and add the following:</p>
+<pre><code class="lang-javascript"><span class="string">'use strict'</span>;
+myApp.directive(<span class="string">'noiseBubble'</span>, <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
+    <span class="keyword">return</span> {
+        link: <span class="function"><span class="keyword">function</span> <span class="params">(scope, elm, attrs)</span> {</span>
+            elm.tooltip({
+                title: scope.$eval(attrs.noise)
+            });
+        }
+    };
+});</code></pre>
+<p>Now that we have a sweet, sweet directive, let&#39;s update our home template:</p>
+<pre><code class="lang-html"><span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"span12"</span>&gt;</span>
+  <span class="variable">{{title}}</span>
+    <span class="tag">&lt;<span class="title">ul</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">li</span> <span class="attribute">ng-repeat</span>=<span class="value">"animal in animals"</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">span</span> <span class="attribute">noise-bubble</span> <span class="attribute">noise</span>=<span class="value">"animal.sound"</span>&gt;</span><span class="variable">{{animal.name}}</span><span class="tag">&lt;/<span class="title">span</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">ul</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">div</span>&gt;</span></code></pre>
+<p>OH! THAT IS BEAUTIFUL. WHUT! </p>
 
       </section>
       <footer>
