@@ -103,7 +103,7 @@ In **~/Views/Shared/_Layout.html**, let's modify the content to look like this:
 </html>
 ```
 
-The important things to note are that we added the ng-app attribute to the body and we added a div with the ng-view attribute. 
+The important things to note are that we added the [ng-app](http://docs.angularjs.org/api/ng.directive:ngApp) attribute to the body and we added a div with the [ng-view](http://docs.angularjs.org/api/ng.directive:ngView) attribute. 
 
 We don't have an app yet or a view… but we'll do that right aways!  
 
@@ -186,7 +186,7 @@ How many hello worlds would you like?
 Let's also add some code to our angular controller at **home.js**:
 
 ```javascript
-myApp.controller('HomeCtrl', ['$scope', function ($scope, $http) {
+myApp.controller('HomeCtrl', ['$scope', '$http', function ($scope, $http) {
 	$scope.message = "hello worrrllld";
 
 	$http.get('/api/Values').success(function (data) {

@@ -119,7 +119,7 @@
         @RenderSection("scripts", required: false)
     <span class="tag">&lt;/<span class="title">body</span>&gt;</span>
 <span class="tag">&lt;/<span class="title">html</span>&gt;</span></code></pre>
-<p>The important things to note are that we added the ng-app attribute to the body and we added a div with the ng-view attribute. </p>
+<p>The important things to note are that we added the <a href="http://docs.angularjs.org/api/ng.directive:ngApp">ng-app</a> attribute to the body and we added a div with the <a href="http://docs.angularjs.org/api/ng.directive:ngView">ng-view</a> attribute. </p>
 <p>We don&#39;t have an app yet or a view… but we&#39;ll do that right aways!  </p>
 <p>We&#39;ve also updated the page to include our new bundles so that the JavaScript and CSS we create will get delivered properly..  if you build and run the project now (F5), you should see a blank page with a simple header reading &quot;Angular App&quot;. </p>
 <p>Hold on there. Sit back down, we&#39;re not done yet.</p>
@@ -171,7 +171,7 @@ myApp.controller('HomeCtrl', ['</span><span class="variable">$scope</span><span 
 }</code></pre>
 <p>How many hello worlds would you like?</p>
 <p>Let&#39;s also add some code to our angular controller at <strong>home.js</strong>:</p>
-<pre><code class="lang-javascript">myApp.controller(<span class="string">'HomeCtrl'</span>, [<span class="string">'$scope'</span>, <span class="function"><span class="keyword">function</span> <span class="params">($scope, $http)</span> {</span>
+<pre><code class="lang-javascript">myApp.controller(<span class="string">'HomeCtrl'</span>, [<span class="string">'$scope'</span>, <span class="string">'$http'</span>, <span class="function"><span class="keyword">function</span> <span class="params">($scope, $http)</span> {</span>
     $scope.message = <span class="string">"hello worrrllld"</span>;
 
     $http.get(<span class="string">'/api/Values'</span>).success(<span class="function"><span class="keyword">function</span> <span class="params">(data)</span> {</span>
