@@ -9,13 +9,20 @@
 - Select the Web API project template and the Razor view engine
 - Click OK 
 
-###Right click on project, and select Manage Nuget Packages
-- Clean up and get rid of some of the stuff we don't want
-- Uninstall knockoutjs in the "Installed packages section"
-- Uninstall jquery ui in the "Installed packages section"
-- In the Online section, search for angular js and install it
-- Search for bootstrap, and install that too
-- Close the nuget package manager for now.
+###Let's set up our dependencies
+Right click on project and select "Manage Nuget Packages". Let's clean up and get rid of some of the stuff we don't want:
+
+Go to the "Installed packages" section
+
+- Uninstall knockoutjs 
+- Uninstall jquery ui
+
+Go to the "Online" section and:
+
+- search for angular js and install it
+- Search for bootstrap and install that too
+
+Close the nuget package manager for now.
 
 ###Set some folders for our angular stuff.. exciting!
 - Add a new at ~/Scripts/app . 
