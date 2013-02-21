@@ -22,7 +22,7 @@ module.exports = function(grunt) {
 		},
 		regarde: {
 			markdown: {
-				files: 'content/*',
+				files: ['content/*', 'template.html'],
 				tasks: ['markdown', 'livereload']
 			}
 		},
