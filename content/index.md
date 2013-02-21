@@ -1,13 +1,15 @@
-#Intro to JavaScript (ECMAScript, JScript, etc)
+#Intro to JavaScript*
+
+<sub>*aka (ECMAScript, JScript, etc)</sub>
 
 ##Overview
 
 ###What is it?
 
-- An [interpreted](http://en.wikipedia.org/wiki/Interpreted_language) programming language
+- [Interpreted](http://en.wikipedia.org/wiki/Interpreted_language)
 - Enables HTTP requests, DOM manipulation, user interaction in the browser
-- Grew to be most popular programming language* 
-- Is now used on client and server (Node.js)
+- The most popular programming language* 
+- Client and server (Node.js)
 
 <sub>*redmonk.com</sub>
 
