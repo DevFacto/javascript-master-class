@@ -1,24 +1,18 @@
-#Intro to JavaScript*
-
-<sub>*aka (ECMAScript, JScript, etc)</sub>
-
 ##Overview
 
 ###What is it?
 
 - [Interpreted](http://en.wikipedia.org/wiki/Interpreted_language)
 - Enables HTTP requests, DOM manipulation, user interaction in the browser
-- The most popular programming language* 
+- The most popular programming language in the world (http://redmonk.com/sogrady/2012/09/12/language-rankings-9-12/) 
 - Client and server (Node.js)
-
-<sub>*redmonk.com</sub>
 
 ###Characteristics
 
 - Prototype-based
-  - No classes (for now)
+  - No classes (for now; expected in the next major spec)
   - Can chain objects in an inheritance chain through 'prototypes's
-- Weakly-typed, ad-hoc polymorphism aka 'duck-typed'
+- Weakly-typed, ad-hoc polymorphism &mdash; aka 'duck-typed'
 - First-class functions
   - Functions are objects
   - Can be arguments to other functions, returned from functions, assigned to variables
@@ -39,7 +33,7 @@ var c = b(a);
 
 JavaScript is famous for its quirks, made possible through its aggressive type coersion. [The WAT Video](http://www.youtube.com/watch?v=kXEgk1Hdze0) by Gary Bernhardt goes over a few.
 
-Code can be written using only [()[]{}!+](http://patriciopalladino.com/blog/2012/08/09/non-alphanumeric-javascript.html) characters.
+Because of type casts, weird code can be written using only [()[]{}!+](http://patriciopalladino.com/blog/2012/08/09/non-alphanumeric-javascript.html) characters.
 
 ```javascript
 +!''+[] //'1'
@@ -161,9 +155,9 @@ alert(TestVar); //shows null
 alert(typeof TestVar); //shows object
 ```
 
-`undefined` and `null` are two distinct types: undefined is a type itself (undefined) while null is an object.
+`undefined` and `null` are two distinct types: `undefined` is a type itself (undefined) while `null` is an object.
 
-Use `a == undefined`
+If we want to test if a variable is `undefined` or `null`, use `a == undefined`.
 
 ```javascript
 var a;
@@ -174,7 +168,7 @@ a = '';
 a == undefined //false
 ```
 
-We may want to check if a variable exists. To do this, we use `typeof(a) === 'undefined'` which doesn't cause an exception when the variable isn't present
+We may want to check if a variable exists. To do this, we use `typeof(a) === 'undefined'`. Unlike the last comparison, this won't cause an exception when the variable isn't present
 
 ```javascript
 var a, b = null, c=0, d='';
@@ -236,13 +230,19 @@ obj.a //3
 
 ```
 
+__What is this doing under the hood you ask?__
+
+1. It creates a new object. The type of this object is `object`; equivalent to `{}`
+2. It sets this new object's internal, inaccessible, [[prototype]] property to be the constructor function's external, accessible, prototype object. 
+3. It executes the constructor function, using the newly created object whenever this is mentioned.
+
 ###Closures
 
 > In computer science, a closure is a first-class function with free variables that are bound in the lexical environment.
 
 &mdash; Mark Thiessen, Computing Scientist, when he quoted [wikipedia](http://bit.ly/4Iou)
 
-Basically, JavaScript allows functions to reference variables outside their own scope. Doing so is similar to using parameters where parameters are bound to another scope.
+Basically, JavaScript allows functions to reference variables outside their own scope.
 
 ```javascript
 var getPairFormatter= function(){
@@ -257,34 +257,33 @@ console.log(formatter({key:'name',value:'bob'}));
 ```
 [Code Available Here](http://jsfiddle.net/gC63h/)
 
+Without the notion of closures, we would need to keep track of variables explicitly and pass them around as additional parameters:
+
 ```javascript
-var myModule = {
-  init: function(settingsFunction){
-    var settings = settingsFunction();
-    $('input').hover(
-      function(event){
-        $(this).addClass(settings.getHoverClass());
-      }, 
-      function(event){
-        $(this).removeClass(settings.getHoverClass());
-      }
-    );
-  }
-};
-
-function Settings(inputHoverClass)
-{
-  var defaultHoverClass='active';    
-  this.getHoverClass = function(){
-    return inputHoverClass || defaultHoverClass;
-  }
+var format= "{key} -> {value}";
+var getPairFormatter= function(){
+  return function(obj, format){
+    return format.replace('{key}', obj.key)
+                 .replace('{value}', obj.value);
+  };
 }
-
-myModule.init(function(){
-  return new Settings('input-active')
-});
+var formatter = getPairFormatter();
+console.log(formatter({key:'name',value:'bob'}, format));
 ```
-[Code Available Here](http://jsfiddle.net/RXcMQ/3/)
+
+Closures are sometimes hard to identify in code since binding is implicit; it would be roughly equivalent to using the `bind` function as shown below:
+
+```javascript
+var getPairFormatter= function(){
+  var format= "{key} -> {value}";
+  return (function(format, obj){
+    return format.replace('{key}', obj.key)
+                 .replace('{value}', obj.value);
+  }).bind(null, format);
+}
+var formatter = getPairFormatter();
+console.log(formatter({key:'name',value:'bob'}));
+```
 
 ###Packaging JavaScript
 
@@ -292,16 +291,16 @@ For large projects, JavaScript can be painful to manage. There are many differen
 
 - __Angular JS__: Uses a module approach
   ```javascript
-  var myModule = angular.module('myModule', []);
+  var myModule = angular.module('myCompany.myModule', []);
    
   // register a new service
   myModule.value('appName', 'MyCoolApp');
    
-  // configure existing services inside initialization blocks.
-  myModule.config(function($locationProvider) {
-    // Configure existing providers
-    $locationProvider.hashPrefix('!');
-  });
+  ...
+
+  var otherModule = angular.module('myCompany.otherModule', ['myCompany.myModule'])
+
+  ...
   ```
 - __jQuery__: Plugin-style modules
   ```javascript
@@ -332,45 +331,44 @@ For large projects, JavaScript can be painful to manage. There are many differen
   ```
 - __Concatenation__: Let the build system concatenate files. Problematic because of potential namespace collisions, dependency ordering issues, no easy debug/production build, and potential for missing dependencies or sub-dependencies
 
-##Advice
-
-###AJAX
-
-- Don't allow get requests to modify data, use proper verbs for requests POST, GET, DELETE, PUT, etc. 
-- All developers should have basic awareness of XSS attacks, just like SQL injection..
-- Sanitize HTML before embedding in page
-http://ejohn.org/blog/re-securing-json/
-
-###API's
-
-- Try to build services as nouns, not verbs (REST)
-- Each service should be self-explanatory by name
-
-###Single-Page Applications
-
-- Offline-friendly
-- Complete control of user experience
-- Clear boundary when separating concerns/responsibilities
-- Responsive/Progressive Enhancement well-suited to client-side
-- Smaller communication payloads between client and server
+##Frameworks
 
 ###jQuery
 
-jQuery ($) is the most ubiquitous library known to all JavaScript-kind. jQuery is so successful because it abstracts much of the complexity of web development away. The DOM API is extremely tedious, and so is working with XMLHttpRequests. It is also an extremely elegant framework: all jQuery objects are arrays of DOM elements at their core, and can be indexed and manipulated as such. Also, each jQuery operation on an object can be chained; the resulting code can be quite terse and powerful. A few must-knows:
+jQuery ($) is the most ubiquitous library known to all JavaScript-kind. jQuery is successful because it abstracts away complexity; the native DOM and XMLHttpRequest APIs are extremely tedious and prone to browser-specific differences. jQuery is also an extremely elegant framework: all jQuery objects are arrays of DOM elements at their core, and can be indexed and manipulated as such. Also, each jQuery operation on an object can be chained; the resulting code can be quite terse and powerful. A few must-knows:
 
 - The library can be called either `jQuery` or `$` (or a custom name in no-conflict mode). The dollar sign is convention, and is a legal identifier in JavaScript.
 - `$(function(){...})` is jQuery's shortcut for `$(document).ready`. When the browser has fully parsed the DOM, this function will be called. At this point its safe to start loading data and manipulating the DOM.
-- Events are easy, too. Traditionally browser events have differed across browsers, and handling them was tedious. jQuery standardizes the behaviour and simplifies calls to register handlers.
-- `Sizzle` is a library jQuery uses for CSS Selection.  It is fast and flexible. jQuery shortcuts selection using `$('.somethingtoselect')`
-- jQuery also shortcuts element creation. When you call `$('<div>')`, it creates an element with the tag name you specify.
+- Events are easy, too. Traditionally, browser events have differed across browsers, and handling them was tedious. jQuery standardizes the behaviour and simplifies calls to register handlers. Some events that you can subscribe to are:
+  - mouse: `click`
+  - input: `blur`
+  - mouse: `hover`
+  - input: `change`
+- `Sizzle` is a fast and flexible library used for CSS Selection. When using jQuery with a string that isn't a html tag (`$('.somethingtoselect')`), you're using Sizzle. It [supports virtually all CSS selectors](https://github.com/jquery/sizzle/wiki/Sizzle-Documentation).
+- When jQuery is called with a string tag name in angle brackets, it creates an element instead of selecting. This can be a handy way to create elements like `$('<div>')`. The result is equivalent to using `$(document.createElement('div'))`
 
 A jQuery example that creates a div element, sets its text property, adds a click handler to it, and appends it to the page:
 
-    $('body').append(
-      $('<div>').text('A div footer').click(function(){
-        alert('You clicked me!');
-      });
-    );
+```javascript
+$('body').append(
+  $('<div>').text('A div footer').addClass('footer').click(function(event){
+    alert('You clicked me!');
+  });
+);
+```
+
+Using native JavaScript methods would be far less terse, and requires creating a lot of intermediate variables without chaining: 
+
+```javascript
+var newDiv = document.createElement('div');
+newDiv.innerText = 'A div footer';
+newDiv.className = 'footer';
+newDiv.onclick = function() {
+  alert('You clicked me!');
+};
+
+document.body.appendChild(newDiv);
+```
 
 ###Other Frameworks
 
@@ -378,7 +376,7 @@ There is a cornucopia of different MV* Frameworks. A few examples for the record
 
 ####Ember.js
 
-Uses traditional MVC Structure. Uses templates, Models, Views, Controllers which extend from Ember's objects.
+Uses traditional MVC structure. Templates, Models, Views, Controllers can all be defined and managed similar to Backbone or Knockout. Expect to see a lot of
 
 ```html
 <script type="text/x-handlebars">
@@ -401,15 +399,11 @@ function widget(name) {
 
 $('body').append(widget('something'));
 ```
-The major disadvantage to this style of development aside from some major inconsistency is that there is no binding. UI elements must be refreshed manually when changes are made to the model.
+The major disadvantage to this style of development aside from its inherent inconsistency is that there is no binding. UI elements must be refreshed manually when changes are made to the model.
 
 ####Angular
 
 Angular is a unique library because it uses the DOM instead of templates to define the app. It also makes heavy use of dependency injection which solves a lot of standard web development problems like passing around dependencies.
-
-####Others
-
-Knockout and Backbone take a similar approach to Ember; the basics will be the same, but syntax slightly different.
 
 ###Make-your-life-easier Libraries
 
@@ -427,22 +421,26 @@ Some of the methods will be supported natively in future versions of JS, or may 
 
 Bootstrap is the single most popular scaffolding library known to the internet. It is a favourite because it is developed by some smart people at Twitter and because it does a good job at reducing boilerplate while staying extremely configurable. It should be a part of every new project.
 
-###Tools
+##Tools
 
-####Chrome Web Inspector
+###Chrome Web Inspector
 
 - better inspector, live update, undo, good debugger
- - $0 
+- $0 
 
-####jsFiddle
+###jsFiddle
 
-####Responsive bookmarklet: http://responsive.victorcoulon.fr/
+jsFiddle, jsBin, jsConsole, jsPerf. There are hundreds of sites dedicated to making your development easier.
 
-####Node.js (command line)
+###Node.js (command line)
 
-####Yeoman for scaffolding and mocking up
+If you are curious, there is an easy way to play around with JavaScript without the need for even a browser. Grab node.js from the [download site](http://nodejs.org/download/). It uses Chrome's V8 JavaScript engine, and has a Command Line Interface (CLI) you can run by typing `node`.
 
-###Testing in JS
+###Yeoman for scaffolding and mocking up
+
+Yeoman is a scaffolding tool that allows developers to build the skeleton of an app effortlessly.
+
+##Testing in JS
 
 As the size of JavaScript projects has grown, there has been more need to use frameworks for testing. A few of the most popular:
 
@@ -453,11 +451,11 @@ As the size of JavaScript projects has grown, there has been more need to use fr
 __Does your Web App need unit tests?__ If there is a lot of business logic on client side, you may want to create a suite of tests. Their purpose is two-fold: ensuring consistent behaviour after changes are made, and documenting the important behaviour of the app.
 Write tests for things that you or team could easily break or where mistakes could happen. When you find bugs, write tests to ensure they don't come back.
 
-### General Advice
+## General Advice
 
 - After deciding which browsers to support, test, test, test on those platforms to squish any cross-platform issues.
 - Start responsive, progressively enhance experience. In all design decisions, keep mobile users in mind.
-- Avoid highly customized controls; disastrous consequences in maintainability
+- Avoid highly customized controls as they can have disastrous consequences in maintainability.
 - Don't be afraid to customize libraries to your needs, but make sure your changes are future-proof by keeping your changes in source control.
 - Know your tools; spend time in your IDE, on the command line, and in Web Inspector
 - Try to keep the cycle between making changes and viewing the results as close as possible. Use tools like live-reload, run tests when files change, etc
