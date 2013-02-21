@@ -198,7 +198,7 @@ angular.module(<span class="string">'myApp.controller'</span>, []).controller(<s
 <h3>Make &#39;em Squeal!</h3>
 <p>You know what would be cool? What if the animal sounds were displayed when we hovered over the animal names..  but we don&#39;t want to use a lame HTML title.
 Hmm, problem. HTML doesn&#39;t have a built-in noise bubble.</p>
-<p>Directives to the rescue? Let&#39;s wire one up so that we can add functionality to our template declaratively.  To do the actual rendering, we can integrate bootstrap&#39;s tooltip.</p>
+<p><a href="http://docs.angularjs.org/guide/directive">Directives</a> to the rescue? Let&#39;s wire one up so that we can add functionality to our template declaratively.  To do the actual rendering, we can integrate bootstrap&#39;s tooltip.</p>
 <p>Ok. Create another javascript file at <strong>~/Scripts/app/directives/noisebubble.js</strong> and add the following:</p>
 <pre><code class="lang-javascript"><span class="string">'use strict'</span>;
 myApp.directive(<span class="string">'noiseBubble'</span>, <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
@@ -220,6 +220,31 @@ myApp.directive(<span class="string">'noiseBubble'</span>, <span class="function
     <span class="tag">&lt;/<span class="title">ul</span>&gt;</span>
 <span class="tag">&lt;/<span class="title">div</span>&gt;</span></code></pre>
 <p>OH! THAT IS BEAUTIFUL. WHUT! </p>
+<p>Kinda cool. Oh, but hey! I can&#39;t add any animals. What if I want to add my own animal that goes &quot;HREEEEK!&quot;</p>
+<h3>I can do that.</h3>
+<p>Let&#39;s go ahead and adjust our controller so that we have an object to use for creating new stuff. Let&#39;s add the following code to the end of our controller:</p>
+<pre><code class="lang-javascript">$scope.newAnimal = {}
+$scope.saveNewAnimal = <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
+    $scope.animals.push($scope.newAnimal);
+    $scope.newAnimal = {};
+};</code></pre>
+<p>Let&#39;s adjust our home template and create a simple form for adding animals. It should now look like this:</p>
+<pre><code class="lang-html"><span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"span12"</span>&gt;</span>
+    <span class="variable">{{title}}</span>
+    <span class="tag">&lt;<span class="title">ul</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">li</span> <span class="attribute">ng-repeat</span>=<span class="value">"animal in animals"</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">span</span> <span class="attribute">noise-bubble</span> <span class="attribute">noise</span>=<span class="value">"animal.sound"</span>&gt;</span><span class="variable">{{animal.name}}</span><span class="tag">&lt;/<span class="title">span</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">ul</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">form</span> <span class="attribute">ng-submit</span>=<span class="value">"saveNewAnimal()"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">h5</span>&gt;</span>Add a new animal<span class="tag">&lt;/<span class="title">h5</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">label</span>&gt;</span>Name:<span class="tag">&lt;/<span class="title">label</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">input</span> <span class="attribute">ng-model</span>=<span class="value">"newAnimal.name"</span> /&gt;</span>
+        <span class="tag">&lt;<span class="title">label</span>&gt;</span>Sound:<span class="tag">&lt;/<span class="title">label</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">input</span> <span class="attribute">ng-model</span>=<span class="value">"newAnimal.sound"</span> /&gt;</span>
+        <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"submit"</span> <span class="attribute">value</span>=<span class="value">"Add"</span> /&gt;</span>
+    <span class="tag">&lt;/<span class="title">form</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">div</span>&gt;</span></code></pre>
 
       </section>
       <footer>

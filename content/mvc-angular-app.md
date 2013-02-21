@@ -226,7 +226,7 @@ OK. Simple so far, but we're on our way. We've built some functional plumbing th
 You know what would be cool? What if the animal sounds were displayed when we hovered over the animal names..  but we don't want to use a lame HTML title.
 Hmm, problem. HTML doesn't have a built-in noise bubble.
 
-Directives to the rescue? Let's wire one up so that we can add functionality to our template declaratively.  To do the actual rendering, we can integrate bootstrap's tooltip.
+[Directives](http://docs.angularjs.org/guide/directive) to the rescue? Let's wire one up so that we can add functionality to our template declaratively.  To do the actual rendering, we can integrate bootstrap's tooltip.
 
 Ok. Create another javascript file at **~/Scripts/app/directives/noisebubble.js** and add the following:
 
@@ -256,3 +256,39 @@ Now that we have a sweet, sweet directive, let's update our home template:
 </div>
 ```
 OH! THAT IS BEAUTIFUL. WHUT! 
+
+Kinda cool. Oh, but hey! I can't add any animals. What if I want to add my own animal that goes "HREEEEK!"
+
+###I can do that.
+
+Let's go ahead and adjust our controller so that we have an object to use for creating new stuff. Let's add the following code to the end of our controller:
+
+```javascript
+$scope.newAnimal = {}
+$scope.saveNewAnimal = function () {
+    $scope.animals.push($scope.newAnimal);
+    $scope.newAnimal = {};
+};
+```
+
+Let's adjust our home template and create a simple form for adding animals. It should now look like this:
+
+```html
+<div class="span12">
+    {{title}}
+    <ul>
+        <li ng-repeat="animal in animals">
+            <span noise-bubble noise="animal.sound">{{animal.name}}</span>
+        </li>
+    </ul>
+    <form ng-submit="saveNewAnimal()">
+        <h5>Add a new animal</h5>
+        <label>Name:</label>
+        <input ng-model="newAnimal.name" />
+        <label>Sound:</label>
+        <input ng-model="newAnimal.sound" />
+        <input type="submit" value="Add" />
+    </form>
+</div>
+
+```
