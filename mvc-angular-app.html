@@ -48,18 +48,18 @@
 <p>Close the nuget package manager for now.</p>
 <h3>Prepare some folders for our angular stuff.. exciting!</h3>
 <ul>
-<li>Add a new folder to the solution at ~/Scripts/app . </li>
+<li>Add a new folder to the solution at <strong>~/Scripts/app</strong> . </li>
 <li>We&#39;ll set up a few subfolders too:<ul>
-<li>~/Scripts/app/controllers</li>
-<li>~/Scripts/app/directives</li>
-<li>~/Scripts/app/views</li>
+<li><strong>~/Scripts/app/controllers</strong></li>
+<li><strong>~/Scripts/app/directives</strong></li>
+<li><strong>~/Scripts/app/views</strong></li>
 </ul>
 </li>
 </ul>
 <h3>Configure our bundles</h3>
 <p>We&#39;ll set these up now so we can embed our JavaScript and CSS in our page.</p>
 <ul>
-<li>Navigate to ~/App_Start/BundleConfig.cs</li>
+<li>Navigate to <strong>~/App_Start/BundleConfig.cs</strong></li>
 <li>Remove the jqueryui bundle, and add our own for bootstrap and angular</li>
 </ul>
 <pre><code class="lang-cs"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> RegisterBundles(BundleCollection bundles)
@@ -84,11 +84,11 @@
         .IncludeDirectory(<span class="string">"~/Scripts/app"</span>, <span class="string">"*.js"</span>, <span class="keyword">true</span>));
 }</code></pre>
 <h3>Clean up our Index view.</h3>
-<p>We&#39;re not going to render anything server side, so open up ~/Views/Home/Index.cshtml and remove everything!</p>
+<p>We&#39;re not going to render anything server side, so open up <strong>~/Views/Home/Index.cshtml</strong> and remove everything!</p>
 <h3>Let&#39;s start with a fresh slate for our CSS too...</h3>
-<p>Open up ~/Content/Site.css and remove EVERYTHING!  We&#39;re using bootstrap out tha&#39; gate, so we&#39;ll add styles as we need them, not pre-emptively.</p>
+<p>Open up <strong>~/Content/Site.css</strong> and remove EVERYTHING!  We&#39;re using bootstrap out tha&#39; gate, so we&#39;ll add styles as we need them, not pre-emptively.</p>
 <h3>Set up our layout to host our app</h3>
-<p>In ~/Views/Shared/_Layout.html, let&#39;s modify the content to look like this:</p>
+<p>In <strong>~/Views/Shared/_Layout.html</strong>, let&#39;s modify the content to look like this:</p>
 <pre><code class="lang-html"><span class="doctype">&lt;!DOCTYPE html&gt;</span>
 <span class="tag">&lt;<span class="title">html</span> <span class="attribute">lang</span>=<span class="value">"en"</span>&gt;</span>
 <span class="tag">&lt;<span class="title">head</span>&gt;</span>
@@ -120,11 +120,12 @@
     <span class="tag">&lt;/<span class="title">body</span>&gt;</span>
 <span class="tag">&lt;/<span class="title">html</span>&gt;</span></code></pre>
 <p>The important things to note are that we added the ng-app attribute to the body and we added a div with the ng-view attribute. </p>
-<p>We don&#39;t have an app yet or a view… but we&#39;ll do that right aways!  We&#39;ve also updated the page to include our new bundles so that the JavaScript and CSS we create will get delivered properly..  if you build and run the project now (F5), you should see a blank page with a simple header reading &quot;Angular App&quot;. </p>
-<p>Hold on there, we&#39;re not done yet.</p>
+<p>We don&#39;t have an app yet or a view… but we&#39;ll do that right aways!  </p>
+<p>We&#39;ve also updated the page to include our new bundles so that the JavaScript and CSS we create will get delivered properly..  if you build and run the project now (F5), you should see a blank page with a simple header reading &quot;Angular App&quot;. </p>
+<p>Hold on there. Sit back down, we&#39;re not done yet.</p>
 <h3>We need a module!</h3>
 <p>Let&#39;s get started creating our angular app so that ng-app attribute actually has something to grab onto.</p>
-<p>Create a javascript file, called app.js in the ~/Scripts/app folder and let&#39;s create our first module by adding the following code to this file:</p>
+<p>Create a javascript file, called <strong>app.js</strong> in the <strong>~/Scripts/app</strong> folder and let&#39;s create our first module by adding the following code:</p>
 <pre><code class="lang-javascript"><span class="string">'use strict'</span>;
 
 <span class="keyword">var</span> myApp = angular.module(<span class="string">'myApp'</span>, []);
@@ -146,20 +147,20 @@ myApp.run([<span class="string">'$rootScope'</span>, <span class="keyword">funct
 }]);</code></pre>
 <h3>NEXT!!</h3>
 <p>Now, we&#39;ve defined our module, our app, and we&#39;ve defined some routes. We&#39;ve said that for the default route, we want to render a home view. Remember the ng-view we defined in the template… this configuration will determine what content gets placed there depending on the route URL in the browser. But, we haven&#39;t created our view template or controller yet!</p>
-<p>Create an html file at ~/Scripts/app/views/home.html and replace the default content with the following:</p>
+<p>Create an html file at <strong>~/Scripts/app/views/home.html</strong> and replace the default content with the following:</p>
 <pre><code class="lang-html"> <span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"span12"</span>&gt;</span>    
     <span class="variable">{{message}}</span>
 <span class="tag">&lt;/<span class="title">div</span>&gt;</span></code></pre>
-<p>Create a JavaScript file at ~/Scripts/app/controllers/home.js and add the following content:</p>
+<p>Create a JavaScript file at <strong>~/Scripts/app/controllers/home.js</strong> and add the following content:</p>
 <pre><code class="lang-html"><span class="xml">'use strict';
 myApp.controller('HomeCtrl', ['</span><span class="variable">$scope</span><span class="xml">', function(</span><span class="variable">$scope</span><span class="xml">) {
     </span><span class="variable">$scope.message</span><span class="xml"> = “Hello worrrrllld”;    
 }]);</span></code></pre>
 <h3>It&#39;s ALIVE!!</h3>
-<p>Now, if you rebuild your app and run it, you should see the page rendered with the text from our home view. Interesting? Probably not yet.</p>
+<p>Now, if you rebuild your app and run it, you should see the page rendered with the text from our home view. Interesting? Mind blown? I hope not yet. That would be embarrassing.</p>
 <h3>Make it pop!</h3>
-<p>Let&#39;s see if we can do something more interesting and get something from the server.</p>
-<p>Go to the default Web API controller created for us at ~/Controllers/ValuesController.cs. It&#39;s a silly name, but let&#39;s work with it for now. Let&#39;s modify the Get() method a bit…</p>
+<p>Let&#39;s see if we can do something more interesting and make it talk to the server.</p>
+<p>Go to the default Web API controller created for us at <strong>~/Controllers/ValuesController.cs</strong>. It&#39;s a silly name, but let&#39;s work with it for now. Let&#39;s modify the <strong>Get()</strong> method a bit…</p>
 <pre><code class="lang-cs"><span class="keyword">public</span> IEnumerable&lt;<span class="keyword">string</span>&gt; Get()
 {
     <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">string</span>[] { 
@@ -171,7 +172,7 @@ myApp.controller('HomeCtrl', ['</span><span class="variable">$scope</span><span 
     };
 }</code></pre>
 <p>How many hello worlds would you like?</p>
-<p>Let&#39;s also add some code to our angular controller at home.js:</p>
+<p>Let&#39;s also add some code to our angular controller at <strong>home.js</strong>:</p>
 <pre><code class="lang-javascript">myApp.controller(<span class="string">'HomeCtrl'</span>, [<span class="string">'$scope'</span>, <span class="function"><span class="keyword">function</span> <span class="params">($scope, $http)</span> {</span>
     $scope.message = <span class="string">"hello worrrllld"</span>;
 
@@ -179,7 +180,7 @@ myApp.controller('HomeCtrl', ['</span><span class="variable">$scope</span><span 
         $scope.messages = data;
     });
 }]);</code></pre>
-<p>And let&#39;s see if we can display that in our view too. Adjust the template in your home.html file:</p>
+<p>And let&#39;s see if we can display that in our view too. Adjust the template in your <strong>home.html</strong> file:</p>
 <pre><code class="lang-html"><span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"span12"</span>&gt;</span>
     <span class="variable">{{message}}</span>
 
