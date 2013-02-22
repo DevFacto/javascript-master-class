@@ -227,22 +227,24 @@ OK. Simple so far, but we're on our way. We've built some functional plumbing th
 You know what would be cool? What if the animal sounds were displayed when we hovered over the animal names..  but we don't want to use a lame HTML title.
 Hmm, problem. HTML doesn't have a built-in noise bubble.
 
-[Directives](http://docs.angularjs.org/guide/directive) to the rescue? Let's wire one up so that we can add functionality to our template declaratively.  To do the actual rendering, we can integrate bootstrap's tooltip.
+[Directives](http://docs.angularjs.org/guide/directive) to the rescue. Directives are Angular's way of teaching the browser more tricks. Directives are special keywords in tags, classes, attributes, and comments. Let's wire up a directive as an attribute.
+
+Bootstrap has a bunch of handy JavaScript widgets we can take advantage of; to use the tooltip, we just have to call `$.fn.tooltip` on an element.
 
 Ok. Create another javascript file at **~/Scripts/app/directives/noisebubble.js** and add the following:
 
 ```javascript
 'use strict';
 angular.module('myApp.directives', []).directive('noiseBubble', function () {
-    return {
-        link: function (scope, elm, attrs) {
+    return function (scope, elm, attrs) {
             elm.tooltip({
                 title: scope.$eval(attrs.noise)
             });
-        }
-    };
+        };
 });
 ```
+
+What does this do? We've seen modules before; we're just isolating the directives module. When creating a directive, we give it a name and a constructor function. The constructor function returns a `link` function. `Link` functions simply take an element and a scope and bind them together to do something interesting.
 
 Now we have to go back to our root module (app.js) and change the module definition to ensure we include 'myApp.directives' as a dependency:
 
@@ -339,6 +341,8 @@ $scope.removeAnimal = function (animal) {
 ```
 
 Refresh the browser. Amazing how simple that was.
+
+As we can see, adding and removing elements is quite easy in Angular. Properties on the scope object are watched by the framework for changes, and then any views that use these properties will be changed immediately to reflect those changes. We don't have to worry about notifying or refreshing; just make changes to model objects and watch the results.
 
 So now we can fetch, add, delete. What about edit? What about posting changes to the server? 
 
