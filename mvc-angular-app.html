@@ -156,7 +156,7 @@ myApp.config([<span class="string">'$routeProvider'</span>, <span class="functio
 <p>Create a JavaScript file at <strong>~/Scripts/app/controllers/home.js</strong> and add the following content:</p>
 <pre><code class="lang-javascript"><span class="string">'use strict'</span>;
 angular.module(<span class="string">'myApp.controller'</span>, []).controller(<span class="string">'HomeCtrl'</span>, <span class="keyword">function</span>($scope) {
-    $scope.title = “Hello worrrrllld”;    
+    $scope.title = <span class="string">"Hello worrrrllld"</span>;    
 });</code></pre>
 <p>We also have to get our app module set up. In the root module (app.js), change the module definition to include &#39;myApp.controller&#39; as a dependency:</p>
 <pre><code class="lang-javascript"><span class="keyword">var</span> myApp = angular.module(<span class="string">'myApp'</span>, [<span class="string">'myApp.controller'</span>]);</code></pre>

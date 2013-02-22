@@ -157,7 +157,7 @@ Create a JavaScript file at **~/Scripts/app/controllers/home.js** and add the fo
 ```javascript
 'use strict';
 angular.module('myApp.controller', []).controller('HomeCtrl', function($scope) {
-	$scope.title = “Hello worrrrllld”;    
+	$scope.title = "Hello worrrrllld";    
 });
 ```
 
